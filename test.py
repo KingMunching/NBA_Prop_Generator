@@ -11,6 +11,7 @@
 
 # imports
 from nba_api.live.nba.endpoints import scoreboard
+from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.endpoints import commonteamroster
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import playergamelog
@@ -88,8 +89,17 @@ def get_team_players():
             print(get_team(game['Home Team']))
 
 
-# run testing methods
-getRequest()
-get_stats()
-get_team_players()
+def get_player_stats(id):
+    career = playercareerstats.PlayerCareerStats(player_id=id)
+    return career
 
+
+# run testing methods
+# getRequest()
+# get_stats()
+# get_team_players()
+
+# gets player stats
+print(get_player_stats('1631210').get_json())
+
+# get player stats from last N games
