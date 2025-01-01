@@ -30,6 +30,7 @@ def getRequest():
 
 
 def get_team_players():
+    
     def get_games():
         # Fetch data for all games schedule for today
         today_games = scoreboard.ScoreBoard()
@@ -45,6 +46,13 @@ def get_team_players():
                 'Away Team': away_team
             })
         return upcoming_games
+    
+    #for testing purposes
+    def print_upcoming_games(upcoming_games):
+        if upcoming_games:
+            print("NBA Games:")
+        for game in upcoming_games:
+            print(f'{game['Away Team']} vs {game['Home Team']}')
 
     def get_team(t):
         return teams.find_teams_by_full_name(f'{t}')
@@ -55,17 +63,18 @@ def get_team_players():
     def get_team_roster(t):
         team_info = commonteamroster.CommonTeamRoster(team_id=t, season="2024-25")
         return team_info
+    
+    print_upcoming_games(get_games())
 
-    upcoming_games = get_games()
-
-    if upcoming_games:
-        print("NBA Games:")
-        for game in upcoming_games:
-            # print(f'{game['Away Team']} vs {game['Home Team']}')
-            print(get_team_id(game['Away Team']))
-            print(get_team(game['Away Team']))
-            print(get_team_id(game['Home Team']))
-            print(get_team(game['Home Team']))
+#    upcoming_games = get_games()
+#    if upcoming_games:
+#        print("NBA Games:")
+#        for game in upcoming_games:
+#            # print(f'{game['Away Team']} vs {game['Home Team']}')
+#            print(get_team_id(game['Away Team']))
+#            print(get_team(game['Away Team']))
+#            print(get_team_id(game['Home Team']))
+#            print(get_team(game['Home Team']))
 
 
 def get_player_stats(id):
@@ -76,9 +85,6 @@ def get_player_stats(id):
 # run testing methods
 # getRequest()
 # get_stats()
-# get_team_players()
-
-# gets player stats
-print(get_player_stats('1631210').get_json())
+get_team_players()
 
 # get player stats from last N games
