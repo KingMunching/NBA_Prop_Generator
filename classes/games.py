@@ -5,8 +5,8 @@ class Game:
     team2 = ""  
 
     def __init__(self, team1, team2):
-        self.teamId = team1
-        self.teamName = team2
+        self.team1 = team1
+        self.team2 = team2
     
     def get_team1(self):
         return self.team1
