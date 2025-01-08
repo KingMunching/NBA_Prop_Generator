@@ -13,11 +13,15 @@
 
 
 # imports
+from typing import List
 from nba_api.live.nba.endpoints import scoreboard
 from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.endpoints import commonteamroster
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import playergamelog
+from classes.games import Game
+from classes.teams import Team
+from classes.players import Player
 import pandas as pd
 import sys
 
@@ -67,16 +71,35 @@ def get_team_players():
         return team_info
     
     
-    print_upcoming_games(get_games())
+    #print_upcoming_games(get_games())
 
-    #TESTING TO GET TEAM ROSTER
+    ###########TESTING TO GET TEAM ROSTER
 
    # print(get_team_id("Dallas Mavericks"))
-    x = get_team_roster("1610612742")
-    df = pd.DataFrame(x.get_data_frames()[0])
+   # x = get_team_roster("1610612742")
+   #df = pd.DataFrame(x.get_data_frames()[0])
     #print_roster(df)
-    roster = df[["PLAYER","PLAYER_ID"]]
-    print(roster)
+   # roster = df[["PLAYER","PLAYER_ID"]]
+    #print(roster)
+
+    ###########TESTING THE LOAD TEAMS
+
+    def load_team() -> List[Game]:
+        today_games_dict = scoreboard.ScoreBoard().games.get_dict()
+        games_today = []
+        for games in today_games_dict:
+                                        # New York   + Knicks                                  
+            team1Name, team2Name = games["homeTeam"]["teamCity"] +" "+ games["homeTeam"]["teamName"], games["awayTeam"]["teamCity"]+" "+games["awayTeam"]["teamName"]
+            team1ID, team2ID = get_team_id(team1Name), get_team_id(team2Name)
+            game = Game(Team(team1ID,team1Name), Team(team2ID,team2Name))
+            games_today.append(game)
+        return games_today
+    
+    games = load_team()
+    #[game, game2, game3, ...]
+    for game in games:
+        print(game.get_team1().get_teamName() + " vs "+ game.get_team2().get_teamName()) 
+
     
 
 #    upcoming_games = get_games()
