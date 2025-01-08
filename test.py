@@ -19,6 +19,7 @@ from nba_api.stats.endpoints import commonteamroster
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import playergamelog
 import pandas as pd
+import sys
 
 
 def getRequest():
@@ -61,10 +62,22 @@ def get_team_players():
         return teams.find_teams_by_full_name(f'{t}')[0].get("id")
 
     def get_team_roster(t):
+        #This returns more than one data frame: CommonTeamRoster and coaches
         team_info = commonteamroster.CommonTeamRoster(team_id=t, season="2024-25")
         return team_info
     
+    
     print_upcoming_games(get_games())
+
+    #TESTING TO GET TEAM ROSTER
+
+   # print(get_team_id("Dallas Mavericks"))
+    x = get_team_roster("1610612742")
+    df = pd.DataFrame(x.get_data_frames()[0])
+    #print_roster(df)
+    roster = df[["PLAYER","PLAYER_ID"]]
+    print(roster)
+    
 
 #    upcoming_games = get_games()
 #    if upcoming_games:
@@ -85,6 +98,6 @@ def get_player_stats(id):
 # run testing methods
 # getRequest()
 # get_stats()
+sys.stdout.reconfigure(encoding='utf-8') #fix printing problem
 get_team_players()
 
-# get player stats from last N games

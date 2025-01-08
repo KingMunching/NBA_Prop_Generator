@@ -3,6 +3,7 @@ from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.static import teams
 from classes.games import Game
 from classes.teams import Team
+from classes.players import Player
 
 class controller:
     #list of game objects
@@ -19,8 +20,11 @@ class controller:
         today_games_dict = scoreboard.ScoreBoard().__dict__
         games_today = []
         for games in today_games_dict:
-                                        # New York               +      Knicks                      
-            team1Name, team2Name = games["homeTeam"]["teamCity"] +" "+ games["homeTeam"]["teamName"], games["awayTeam"]["teamCity"]+" "+games["awayTeam"]["teamName"]
+                                        # New York   + Knicks                                  
+            team1Name, team2Name = games["homeTeam"]["teamCity"] 
+            +" "+ games["homeTeam"]["teamName"], 
+            games["awayTeam"]["teamCity"]
+            +" "+games["awayTeam"]["teamName"]
             team1ID, team2ID = self.get_team_id(team1Name), self.get_team_id(team2Name)
             game = Game(Team(team1ID,team1Name), Team(team2ID,team2Name))
             games_today.append(game)

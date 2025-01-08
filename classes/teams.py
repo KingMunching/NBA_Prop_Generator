@@ -1,3 +1,5 @@
+from classes.players import Player
+
 class Team:
     teamID = ""
     teamName = ""
@@ -8,6 +10,9 @@ class Team:
     def __init__(self, teamID, teamName):
         self.teamID = teamID
         self.teamName = teamName
+    
+    def add_player(self, player:Player):
+        self.players.append(player)
 
     def get_teamID(self):
         return self.teamID
