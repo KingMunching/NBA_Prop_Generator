@@ -4,12 +4,15 @@
 # common team roster
 # https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/endpoints/commonteamroster.md
 
-
 # can view end points here
 # https://github.com/swar/nba_api/tree/master/docs/nba_api/stats/endpoints
 
 #  View the outputs of end points
 # https://github.com/swar/nba_api/tree/master/docs/nba_api/stats/endpoints_output
+
+# Get the player stats
+# https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/endpoints/playergamelog.md
+
 
 
 # imports
@@ -63,6 +66,15 @@ def get_team_players():
         return teams.find_teams_by_full_name(f'{t}')
 
     def get_team_id(t):
+
+        #Case that team is LA Clippers
+        if t == "LA Clippers":
+            return teams.find_teams_by_full_name(f'Los Angeles Clippers')[0].get("id")
+
+        #Case that team is LA Lakers
+        if t == "LA Lakers":
+            return teams.find_teams_by_full_name(f'Los Angeles Lakers')[0].get("id")  
+
         return teams.find_teams_by_full_name(f'{t}')[0].get("id")
 
     def get_team_roster(t):
@@ -75,16 +87,35 @@ def get_team_players():
 
     ###########TESTING TO GET TEAM ROSTER
 
-   # print(get_team_id("Dallas Mavericks"))
-   # x = get_team_roster("1610612742")
-   #df = pd.DataFrame(x.get_data_frames()[0])
-    #print_roster(df)
-   # roster = df[["PLAYER","PLAYER_ID"]]
+    print(get_team_id("Dallas Mavericks"))
+    dallas = Team(get_team_id("Dallas Mavericks"), "Dallas Mavericks")
+    x = get_team_roster(dallas.get_teamID())
+    df = pd.DataFrame(x.get_data_frames()[0])
+    roster = df[["PLAYER","PLAYER_ID"]]
     #print(roster)
+
+
+    ### TESTING THE POPULATE A TEAM
+
+    def populate(roster:pd.DataFrame, team:Team ):
+        for player in roster.itertuples():
+            name = player.PLAYER
+            id = player.PLAYER_ID
+            team.add_player(Player(id,name))
+    
+    def test_populate(team:Team):
+        for player in team.get_players():
+            print(player.get_playerName())
+    
+    populate(roster, dallas)
+    test_populate(dallas)
+
+
 
     ###########TESTING THE LOAD TEAMS
 
-    def load_team() -> List[Game]:
+"""""
+ #   def load_team() -> List[Game]:
         today_games_dict = scoreboard.ScoreBoard().games.get_dict()
         games_today = []
         for games in today_games_dict:
@@ -95,11 +126,22 @@ def get_team_players():
             games_today.append(game)
         return games_today
     
-    games = load_team()
+ #   games = load_team()
     #[game, game2, game3, ...]
-    for game in games:
+ #   for game in games:
         print(game.get_team1().get_teamName() + " vs "+ game.get_team2().get_teamName()) 
+        print(str(game.get_team1().get_teamID()) + " vs "+ str(game.get_team2().get_teamID()))
 
+ #   def load_players(team:Team):
+        teamID = team.get_teamID
+
+
+        pass
+
+ #   def extract_players():
+        pass
+
+"""
     
 
 #    upcoming_games = get_games()
