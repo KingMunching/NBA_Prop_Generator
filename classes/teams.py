@@ -1,7 +1,7 @@
 from classes.players import Player
 
 class Team:
-    teamID = 0
+    teamID = ""
     teamName = ""
     city = ""
     state = ""
