@@ -87,17 +87,25 @@ def get_team_players():
 
     ###########TESTING TO GET TEAM ROSTER
 
-    print(get_team_id("Dallas Mavericks"))
-    dallas = Team(get_team_id("Dallas Mavericks"), "Dallas Mavericks")
-    x = get_team_roster(dallas.get_teamID())
-    df = pd.DataFrame(x.get_data_frames()[0])
-    roster = df[["PLAYER","PLAYER_ID"]]
+    
+    
+
+
+    #Turn a team's roster into a dataframe consisting of their Names
+    # and Player ID
+    def players_to_df(team:Team):
+        roster = get_team_roster(team.get_teamID())
+        df = pd.DataFrame(roster.get_data_frames()[0])
+        return df[["PLAYER","PLAYER_ID"]]
+
+
     #print(roster)
 
-
+    
     ### TESTING THE POPULATE A TEAM
 
-    def populate(roster:pd.DataFrame, team:Team ):
+    def populate_team(team:Team):
+        roster = players_to_df(team)
         for player in roster.itertuples():
             name = player.PLAYER
             id = player.PLAYER_ID
@@ -107,15 +115,17 @@ def get_team_players():
         for player in team.get_players():
             print(player.get_playerName())
     
-    populate(roster, dallas)
+    dallas = Team(get_team_id("Dallas Mavericks"), "Dallas Mavericks")
+    populate_team(dallas)
     test_populate(dallas)
 
-
+    
 
     ###########TESTING THE LOAD TEAMS
 
-"""""
- #   def load_team() -> List[Game]:
+""""
+
+    def load_team() -> List[Game]:
         today_games_dict = scoreboard.ScoreBoard().games.get_dict()
         games_today = []
         for games in today_games_dict:
@@ -126,22 +136,20 @@ def get_team_players():
             games_today.append(game)
         return games_today
     
- #   games = load_team()
+    games = load_team()
     #[game, game2, game3, ...]
- #   for game in games:
+    for game in games:
         print(game.get_team1().get_teamName() + " vs "+ game.get_team2().get_teamName()) 
         print(str(game.get_team1().get_teamID()) + " vs "+ str(game.get_team2().get_teamID()))
 
- #   def load_players(team:Team):
+    def load_players(team:Team):
         teamID = team.get_teamID
-
-
         pass
 
  #   def extract_players():
         pass
-
 """
+
     
 
 #    upcoming_games = get_games()
