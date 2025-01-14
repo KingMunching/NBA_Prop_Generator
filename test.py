@@ -13,6 +13,10 @@
 # Get the player stats
 # https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/endpoints/playergamelog.md
 
+# Player game logs
+# https://github.com/swar/nba_api/blob/master/docs/nba_api/stats/endpoints/playergamelog.md
+
+
 
 
 # imports
@@ -89,15 +93,36 @@ def get_team_players():
 
     print(get_team_id("Dallas Mavericks"))
     dallas = Team(get_team_id("Dallas Mavericks"), "Dallas Mavericks")
-    x = get_team_roster(dallas.get_teamID())
-    df = pd.DataFrame(x.get_data_frames()[0])
-    roster = df[["PLAYER","PLAYER_ID"]]
     #print(roster)
 
 
     ### TESTING THE POPULATE A TEAM
 
-    def populate(roster:pd.DataFrame, team:Team ):
+    """
+        converts a team to a DataFrame and returns
+        only its players and their player_id
+
+        parameter:
+            team - Team Object
+        returns:
+            a data frame consisting of players and their IDs
+    """
+
+    def extract_roster(team:Team) -> pd.DataFrame:
+        roster =  get_team_roster(team.get_teamID())
+        df = pd.DataFrame(roster.get_data_frames()[0])
+        return df[["PLAYER","PLAYER_ID"]]
+    
+    """
+        populates a team's roster with its current players
+        i.e... Players[] in Team object get filled up
+
+        parameter:
+            team - Team object
+    """
+
+    def populate(team:Team):
+        roster = extract_roster(team)
         for player in roster.itertuples():
             name = player.PLAYER
             id = player.PLAYER_ID
@@ -106,17 +131,33 @@ def get_team_players():
     def test_populate(team:Team):
         for player in team.get_players():
             print(player.get_playerName())
+
+    def load_player_stats(player:Player):
+
+
+
+        pass
     
-    populate(roster, dallas)
-    test_populate(dallas)
+    #populate(dallas)
+    #test_populate(dallas)
+
+
     
 
 
 
     ###########TESTING THE LOAD TEAMS
 
-"""""
- #   def load_team() -> List[Game]:
+
+    """
+    
+        This method returns today's NBA games
+
+        returns:
+            A list of games representing today's games
+    """
+
+    def load_team() -> List[Game]:
         today_games_dict = scoreboard.ScoreBoard().games.get_dict()
         games_today = []
         for games in today_games_dict:
@@ -127,22 +168,18 @@ def get_team_players():
             games_today.append(game)
         return games_today
     
- #   games = load_team()
+    games = load_team()
     #[game, game2, game3, ...]
- #   for game in games:
+    for game in games:
         print(game.get_team1().get_teamName() + " vs "+ game.get_team2().get_teamName()) 
         print(str(game.get_team1().get_teamID()) + " vs "+ str(game.get_team2().get_teamID()))
 
- #   def load_players(team:Team):
+    def load_players(team:Team):
         teamID = team.get_teamID
-
-
         pass
 
  #   def extract_players():
         pass
-
-"""
     
 
 #    upcoming_games = get_games()
