@@ -1,5 +1,5 @@
 import sqlite3
-from classes.players import Player
+from players import Player
 class Database:
     
 
@@ -23,7 +23,7 @@ class Database:
         connection.close()
     
     def test_insert(self):
-        player = Player(124, "John")
+        player = Player(125, "King")
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
 
