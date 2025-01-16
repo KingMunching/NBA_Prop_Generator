@@ -133,9 +133,6 @@ def get_team_players():
             print(player.get_playerName())
 
     def load_player_stats(player:Player):
-
-
-
         pass
     
     #populate(dallas)
@@ -168,11 +165,33 @@ def get_team_players():
             games_today.append(game)
         return games_today
     
+    """
     games = load_team()
     #[game, game2, game3, ...]
     for game in games:
         print(game.get_team1().get_teamName() + " vs "+ game.get_team2().get_teamName()) 
         print(str(game.get_team1().get_teamID()) + " vs "+ str(game.get_team2().get_teamID()))
+
+    """
+    ### TEST THE DEQUE OF PLAYERS
+
+    """
+    test_player = Player(123, "Test Player")
+    print(test_player.get_playerName(), test_player.get_playerID())
+    
+    for i in range(11):
+        test_player.add_pts(i)
+    
+    print(test_player.get_PTS())
+
+    test_player.add_pts(12)
+
+    print(test_player.get_PTS())
+    print(list(test_player.get_PTS()))
+    
+    """
+
+
 
     def load_players(team:Team):
         teamID = team.get_teamID

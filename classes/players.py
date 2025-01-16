@@ -1,3 +1,5 @@
+import json
+from collections import deque
 class Player:
     playerId = ""
     playerName = ""
@@ -10,7 +12,7 @@ class Player:
     BLK = 0
     TOV = 0
     PF = 0
-    PTS = 0
+    PTS = deque(maxlen=10)
 
     def __init__(self, playerId, playerName):
         self.playerId = playerId
@@ -27,7 +29,6 @@ class Player:
     
     def set_playerName(self, playerName):
         self.playerName = playerName
-
 
     def get_FG3M(self):
         return self.FG3M
@@ -76,3 +77,6 @@ class Player:
     
     def set_PTS(self, PTS):
         self.PTS = PTS
+
+    def add_pts(self, pts):
+        self.PTS.append(pts)
