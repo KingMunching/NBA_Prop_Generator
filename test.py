@@ -140,7 +140,7 @@ def get_team_players():
     #populate(dallas)
     #test_populate(dallas)
 
-
+    
     
 
 
@@ -166,17 +166,17 @@ def get_team_players():
             game = Game(Team(team1ID,team1Name), Team(team2ID,team2Name))
             games_today.append(game)
         return games_today
-    """
+    
     games = load_team()
     #[game, game2, game3, ...]
     for game in games:
         print(game.get_team1().get_teamName() + " vs "+ game.get_team2().get_teamName()) 
         print(str(game.get_team1().get_teamID()) + " vs "+ str(game.get_team2().get_teamID()))
-    """
+    
     
     ### TEST THE DEQUE OF PLAYERS
 
-    
+    """
     test_player = Player(123, "Test Player")
     print(test_player.get_playerName(), test_player.get_playerID())
     
@@ -185,7 +185,7 @@ def get_team_players():
     
     print(test_player.get_PTS())
     
-
+    """
 
 
     def load_players(team:Team):
