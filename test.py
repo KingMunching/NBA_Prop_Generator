@@ -167,12 +167,15 @@ def get_team_players():
             games_today.append(game)
         return games_today
     
+    
     games = load_team()
     #[game, game2, game3, ...]
     for game in games:
         print(game.get_team1().get_teamName() + " vs "+ game.get_team2().get_teamName()) 
         print(str(game.get_team1().get_teamID()) + " vs "+ str(game.get_team2().get_teamID()))
     
+    
+
     
     ### TEST THE DEQUE OF PLAYERS
 
