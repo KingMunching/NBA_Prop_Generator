@@ -18,7 +18,6 @@
 
 
 
-
 # imports
 from typing import List
 from nba_api.live.nba.endpoints import scoreboard
@@ -32,7 +31,6 @@ from classes.players import Player
 import pandas as pd
 import sys
 import json
-from collections import deque
 
 
 def getRequest():
@@ -132,13 +130,14 @@ def get_team_players():
     
     def test_populate(team:Team):
         for player in team.get_players():
-            print(player.get_playerName())
+            print(f"{player.get_playerName()}, {player.get_playerID()}" )
+            
 
     def load_player_stats(player:Player):
         pass
     
-    #populate(dallas)
-    #test_populate(dallas)
+    populate(dallas)
+    test_populate(dallas)
 
     
     
@@ -156,7 +155,7 @@ def get_team_players():
             A list of games representing today's games
     """
 
-    def load_team() -> List[Game]:
+    """def load_team() -> List[Game]:
         today_games_dict = scoreboard.ScoreBoard().games.get_dict()
         games_today = []
         for games in today_games_dict:
@@ -174,6 +173,7 @@ def get_team_players():
         print(game.get_team1().get_teamName() + " vs "+ game.get_team2().get_teamName()) 
         print(str(game.get_team1().get_teamID()) + " vs "+ str(game.get_team2().get_teamID()))
     
+    """
     
 
     
