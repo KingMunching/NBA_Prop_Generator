@@ -12,7 +12,7 @@ class Player:
     BLK = 0
     TOV = 0
     PF = 0
-    PTS = deque(maxlen=10)
+    PTS = 0
 
     def __init__(self, playerId, playerName):
         self.playerId = playerId

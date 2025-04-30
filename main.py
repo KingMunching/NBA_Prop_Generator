@@ -1,24 +1,32 @@
-from classes.teams import Team
-from service.team_service import *
-from service.game_service import *
-from service.player_service import *
-import sys
-
-def main():
+from database import engine, Base, SessionLocal
+import models           
+from service.team_service import load_team_and_roster
+from models.player_model import Player
+from service.player_stats_service import load_last_n_games, get_player_stats_by_nba_id
     
-    # Example: Working with a team
-    mavericks_id = get_team_id("Dallas Mavericks")
-    dallas = Team(mavericks_id, "Dallas Mavericks")
-    populate_team(dallas)
-    test_populate_team(dallas)
-    
-    # Example: Working with games
-    games = get_games()
-    print_upcoming_games(games)
-    
-    # Example: Get player stats (replace player_id with an actual ID)
-    # stats = get_player_stats(player_id)
-    # print(stats.get_json())  # Uncomment and adjust when using a valid player ID
-
 if __name__ == "__main__":
-    main()
+    Base.metadata.create_all(bind=engine)
+    # this will create (or fetch) the DB row for Dallas, then insert its current roster
+    #team = load_team_and_roster("Dallas Mavericks")
+    
+    db = SessionLocal()
+
+    """
+    try:
+        player = db.query(Player).first()
+        if not player:
+            print("No player found with that NBA ID.")
+        load_last_n_games(player)
+        print(f"Stored last 20 games for {player.name} (NBA ID {player.nba_id}).")
+    finally:
+        db.close()
+    """
+
+    try:
+        player = db.query(Player).first()
+        recent_stats = player.stats.all()
+
+        for stat in recent_stats:
+            print(stat.date, stat.pts, stat.ast, stat.reb)
+    finally:
+        db.close() 
