@@ -8,7 +8,7 @@ def load_team_and_roster(team_name) -> TeamModel:
 
     try:
         #get the roster Dataframe
-        roster_df = get_roster_df(get_team_id(team_name))
+        roster_df = safe_team_roster(get_team_id(team_name))
         nba_id = get_team_id(team_name)
         #check for existing row with nba_id
         team = (db.query(TeamModel).filter(TeamModel.nba_id == nba_id).first())
