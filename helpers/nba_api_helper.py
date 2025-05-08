@@ -7,10 +7,7 @@ from classes.players import Player
 from helpers.retry_helper import retry_nba_call
 
 
-"""
-    Returns the team ID for a given team name.
-    Handles the special cases for LA Clippers and LA Lakers.
-"""
+
 def get_team_id(team_name: str) -> int:
     if team_name in ["LA Clippers", "LA Lakers"]:
         # Convert to the full names used by the API
@@ -28,15 +25,6 @@ def get_roster_df(team_id: int, season: str = "2024-25") -> pd.DataFrame:
     return df[["PLAYER", "PLAYER_ID"]]
 
 
-def populate_team(team: Team):
-    """
-    Populates the Team object with its current players
-    by extracting the roster and adding each player.
-    """
-    roster = get_roster_df(team)
-    for player in roster.itertuples():
-        # Note: Using player.PLAYER_ID and player.PLAYER to create the Player instance.
-        team.add_player(Player(player.PLAYER_ID, player.PLAYER))
 
 def safe_player_log(player_id, **opts):
     """

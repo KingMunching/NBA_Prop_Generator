@@ -1,4 +1,6 @@
 from nba_api.stats.endpoints import playercareerstats
+from models.player_model import Player
+from database import SessionLocal
 
 def get_player_stats(player_id):
     """
@@ -12,3 +14,13 @@ def get_player_stats(player_id):
 def load_player_stats(player):
    
     pass
+
+def get_player_by_name(name):
+    db = SessionLocal()
+    try:
+        player = db.query(Player).filter(Player.name == name).first()
+        return player
+    finally:
+        db.close()
+        
+    
