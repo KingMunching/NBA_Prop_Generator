@@ -46,7 +46,8 @@ class PlayerStatRepository:
                     reb       = row.REB,
                     stl       = row.STL,
                     blk       = row.BLK,
-                    tov       = row.TOV
+                    tov       = row.TOV,
+                    min       = row.MIN
                 )
             self.db.add(stat)
         self.db.commit()
