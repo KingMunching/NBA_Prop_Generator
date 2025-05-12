@@ -1,5 +1,9 @@
+from typing import List
 from sqlalchemy.orm import Session
 from models.team_model import Team as TeamModel
+from models.player_model import Player as PlayerModel
+from models.player_stats import PlayerGameStat
+from sqlalchemy import func, cast, Integer
 
 class TeamRepository:
     
@@ -30,3 +34,18 @@ class TeamRepository:
             self.db.delete(db_team)
             self.db.commit()
         return db_team
+    
+    def get_key_players(self, team: TeamModel) -> List[PlayerModel]:
+        #Get players in team
+        players = (self.db.query(PlayerModel, func.sum(cast(PlayerGameStat.min, Integer)).label("total_min"))
+        .join(PlayerGameStat, PlayerModel.id == PlayerGameStat.player_id)\
+        .filter(PlayerModel.team_id == team.id).group_by(PlayerModel.id)\
+        .order_by(func.sum(cast(PlayerGameStat.min, Integer)).desc())
+        .limit(7).all()
+        )
+
+        key_players = []
+        for player, total_min in players:
+            key_players.append(player)
+        return key_players
+

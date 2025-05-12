@@ -12,7 +12,7 @@ def get_player_stats(player_id):
 
 
 def load_player_stats(player):
-   
+    
     pass
 
 def get_player_by_name(name):

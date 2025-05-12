@@ -1,30 +1,48 @@
 import time
 from database import engine, Base, SessionLocal
 import models           
+from service.prop_service import PropGenerator
 from service.team_service import load_team_and_roster
 from models.player_model import Player
 from service.player_stats_service import load_last_n_games, get_last_n_stats
 from nba_api.stats.static import teams
 from service.player_service import get_player_by_name
 from repositories.player_repository import PlayerRepository
-
+from repositories.team_repository import TeamRepository
+from service.game_service import get_teams_from_today_games
     
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
     # this will create (or fetch) the DB row for Dallas, then insert its current roster
     #team = load_team_and_roster("Washington Wizards")
-    
-    #player = get_player_by_name("Trae Young")
-    #stats = get_last_n_stats(player, 5)
-    
-    #for stat in stats:
-    #    print(f'Points: {stat.pts}, Assisst: {stat.ast}')
+    generator = PropGenerator(
+        prop_type="pts",
+        stat=15,                  # Threshold value (e.g., 15 points)
+        num_games=20,
+        num_rec=5,
+        threshold=0.8      # Minimum success rate of 80%
+    )
 
-    nba_teams = teams.get_teams()
+    # Load teams and players (example)
+    teams_today = get_teams_from_today_games()
+    props = generator.generate_daily_props(teams_today)
+    
 
-    #for team in nba_teams:
-        #load_team_and_roster(team['full_name'])
-        #print(f'loaded {team['full_name']}')
+    # Print results
+    for prop in props:
+       print(f"{prop['player_name']}: {prop['success_rate']:.2%} success rate")
+
+
+    
+    """
+    db = SessionLocal()
+    team_repo = TeamRepository(db)
+    team = team_repo.get_team_by_name("Los Angeles Lakers")
+    key_players = team_repo.get_key_players(team)
+    for player in key_players:
+        print(player.name)
+    """
+
     """
     try:
         player = db.query(Player).first()
@@ -49,7 +67,7 @@ if __name__ == "__main__":
     """
 
     
-    
+    """
     #Query all players
     db = SessionLocal()
     player_repo = PlayerRepository(db)
@@ -65,6 +83,6 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Failed for {player.name}: {e}")
         time.sleep(0.2)
-    
+    """
     
 
