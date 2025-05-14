@@ -1,0 +1,18 @@
+# NBA API and data handling
+nba_api>=1.2.1
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.5  # PostgreSQL adapter
+python-dotenv>=1.0.0
+
+# API Framework (for future implementation)
+fastapi>=0.103.0
+uvicorn>=0.23.0
+pydantic>=2.3.0
+
+# Utilities
+requests>=2.31.0
+python-dateutil>=2.8.2
