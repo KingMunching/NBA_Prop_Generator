@@ -6,10 +6,13 @@ from models.player_stats import PlayerGameStat
 from models.team_model import Team
 from service.game_service import get_teams_from_today_games
 from service.team_service import load_team_and_roster
+from service.player_stats_service import get_last_n_stats
 from sqlalchemy import func, desc
 from helpers.nba_api_helper import safe_team_roster, get_team_id
 from nba_api.stats.endpoints import commonplayerinfo, teamplayerdashboard
 from repositories.team_repository import TeamRepository
+
+
 
 class PropGenerator:
     def __init__(self, prop_type: str, stat: int, threshold: int, num_games:int,
@@ -33,13 +36,8 @@ class PropGenerator:
             Tuple of (success_rate, games_analyzed)
     """
     def analyze_player(self, player: Player) -> Tuple[float, int]:
-        recent_stats = (
-            self.db.query(PlayerGameStat)
-            .filter(PlayerGameStat.player_id == player.id)
-            .order_by(desc(PlayerGameStat.date))
-            .limit(self.num_games)
-            .all()
-        )
+        
+        recent_stats = get_last_n_stats(player, self.num_games)
         if not recent_stats:
             return 0.0, 0
         # Count how many games met the threshold

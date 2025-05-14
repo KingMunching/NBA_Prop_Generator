@@ -17,10 +17,10 @@ if __name__ == "__main__":
     #team = load_team_and_roster("Washington Wizards")
     generator = PropGenerator(
         prop_type="pts",
-        stat=15,                  # Threshold value (e.g., 15 points)
+        stat=20,                  # Threshold value (e.g., 15 points)
         num_games=20,
-        num_rec=5,
-        threshold=0.8      # Minimum success rate of 80%
+        num_rec=10,
+        threshold=0.5      # Minimum success rate of 80%
     )
 
     # Load teams and players (example)
@@ -31,41 +31,6 @@ if __name__ == "__main__":
     # Print results
     for prop in props:
        print(f"{prop['player_name']}: {prop['success_rate']:.2%} success rate")
-
-
-    
-    """
-    db = SessionLocal()
-    team_repo = TeamRepository(db)
-    team = team_repo.get_team_by_name("Los Angeles Lakers")
-    key_players = team_repo.get_key_players(team)
-    for player in key_players:
-        print(player.name)
-    """
-
-    """
-    try:
-        player = db.query(Player).first()
-        if not player:
-            print("No player found with that NBA ID.")
-        load_last_n_games(player)
-        print(f"Stored last 20 games for {player.name} (NBA ID {player.nba_id}).")
-    finally:
-        db.close()
-    """
-
-    """
-    try:
-        player = db.query(Player).first()
-        #get stats of player
-        recent_stats = player.stats.all()
-
-        for stat in recent_stats:
-            print(stat.date, stat.pts, stat.ast, stat.reb)
-    finally:
-        db.close() 
-    """
-
     
     """
     #Query all players
