@@ -102,7 +102,6 @@ class PropGenerator:
         return props[:self.num_rec]
     
     def generate_daily_props(self, teams: List[Team]):
-        
         if not teams:
             print("No teams found for today's games.")
             return []

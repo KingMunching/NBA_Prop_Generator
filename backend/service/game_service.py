@@ -9,11 +9,9 @@ from database import SessionLocal
     containing the home and away team names.
     """
 
-def get_teams_from_today_games() -> List[Team]:
+def get_teams_from_today_games(team_repo: TeamRepository) -> List[Team]:
     today_games = scoreboard.ScoreBoard()
     games_data = today_games.games.get_dict()
-    db = SessionLocal()
-    team_repo = TeamRepository(db)
 
     teams = set()
     for game in games_data:
