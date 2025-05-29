@@ -1,6 +1,8 @@
 // src/App.jsx
 // ... other imports ...
 import TeamDetail from './components/test'; 
+import PlayerCard from './components/PlayerCard';
+import KeyPlayersList from './components/PlayerList';
 import api from './api';
 
 function App() {
@@ -9,7 +11,8 @@ function App() {
 
   // For testing, let's pick a team ID.
   // Make sure a team with this ID exists in your database.
-  const testTeamId = 3 // Change this to an ID of an existing team in your DB
+  const testTeamId = 1 // Change this to an ID of an existing team in your DB
+  const testPlayerId = 111
 
   return (
     <div className="App">
@@ -22,8 +25,8 @@ function App() {
         {/* ... your PropGeneratorForm and results section ... */}
 
         <section className="single-team-test-section">
-          <h3>Test Single Team Fetch</h3>
-          <TeamDetail teamId={testTeamId} />
+          <h3>Test Player Cards</h3>
+          <KeyPlayersList teamID={testTeamId} />
         </section>
 
         {/* ... your existing teams-section for displaying all teams ... */}
