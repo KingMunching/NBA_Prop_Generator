@@ -3,7 +3,9 @@
 import TeamDetail from './components/test'; 
 import PlayerCard from './components/PlayerCard';
 import KeyPlayersList from './components/PlayerList';
+import Navbar from './components/Navbar';
 import api from './api';
+
 
 function App() {
   // ... your existing state and useEffect for fetching all teams ...
@@ -16,6 +18,7 @@ function App() {
 
   return (
     <div className="App">
+      <Navbar />
       <header>
         <h1>NBA Prop Bet Analytics</h1>
         <p><a href={`${api.defaults.baseURL}/docs`} target="_blank" rel="noopener noreferrer">API Docs</a></p>
