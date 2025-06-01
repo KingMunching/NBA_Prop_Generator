@@ -4,27 +4,28 @@
 
   function Navbar() {
     return (
-      <nav className="navbar">
-        <div className="navbar-container">
-          <div className="navbar-brand">
+      <div>
+      <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full" >
+        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
+          <div className="text-cyan-300">
             <h1>NBA Prop Analytics</h1>
           </div>
           
-          <ul className="navbar-menu">
+          <ul className="flex flex-wrap items-center justify-center space-x-6">
             <li className="navbar-item">
-              <a href="#home" className="navbar-link">Home</a>
+              <a href="#home" className="me-4 hover:underline md:me-6">Home</a>
             </li>
             <li className="navbar-item">
-              <a href="#teams" className="navbar-link">Teams</a>
+              <a href="#teams" className="me-4 hover:underline md:me-6">Teams</a>
             </li>
             <li className="navbar-item">
-              <a href="#players" className="navbar-link">Players</a>
+              <a href="#players" className="me-4 hover:underline md:me-6">Players</a>
             </li>
             <li className="navbar-item">
-              <a href="#analytics" className="navbar-link">Analytics</a>
+              <a href="#analytics" className="me-4 hover:underline md:me-6">Analytics</a>
             </li>
             <li className="navbar-item">
-              <a href="http://localhost:8000/docs" className="navbar-link" target="_blank" rel="noopener noreferrer">
+              <a href="http://localhost:8000/docs" className="me-4 hover:underline md:me-6" target="_blank" rel="noopener noreferrer">
                 API Docs
               </a>
             </li>
@@ -37,6 +38,7 @@
           </div>
         </div>
       </nav>
+      </div>
     );
   }
 

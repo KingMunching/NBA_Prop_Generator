@@ -20,7 +20,7 @@ function App() {
     <div className="App">
       <Navbar />
       <header>
-        <h1>NBA Prop Bet Analytics</h1>
+
         <p><a href={`${api.defaults.baseURL}/docs`} target="_blank" rel="noopener noreferrer">API Docs</a></p>
       </header>
 
