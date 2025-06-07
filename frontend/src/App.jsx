@@ -20,16 +20,13 @@ function App() {
     <div className="App">
       <Navbar />
       <header>
-
-        <p><a href={`${api.defaults.baseURL}/docs`} target="_blank" rel="noopener noreferrer">API Docs</a></p>
       </header>
 
       <main>
         {/* ... your PropGeneratorForm and results section ... */}
 
         <section className="single-team-test-section">
-          <h3>Test Player Cards</h3>
-          <KeyPlayersList teamID={testTeamId} />
+         <KeyPlayersList teamID={testTeamId} />
         </section>
 
         {/* ... your existing teams-section for displaying all teams ... */}

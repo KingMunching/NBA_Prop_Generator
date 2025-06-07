@@ -31,7 +31,7 @@ function KeyPlayersList({teamID}){
     if (error) return <div className="error">{error}</div>;
 
     return (
-    <div className="players-container">
+    <div className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparen ">
       <h1>Key Players</h1>
       <div className="players-grid">
         {players.length > 0 ? (

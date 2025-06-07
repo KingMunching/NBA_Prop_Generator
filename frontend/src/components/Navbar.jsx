@@ -1,17 +1,12 @@
-  // src/components/Navbar.jsx
   import React from 'react';
   import './Navbar.css';
 
   function Navbar() {
     return (
       <div>
-      <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full" >
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
-          <div className="text-cyan-300">
-            <h1>NBA Prop Analytics</h1>
-          </div>
-          
-          <ul className="flex flex-wrap items-center justify-center space-x-6">
+      <nav className="w-full" >
+        <div className="max-w-screen-xl  justify-between mx-auto ">          
+          <ul className="flex flex-wrap items-center justify-center space-x-6 p-5 ">
             <li className="navbar-item">
               <a href="#home" className="me-4 hover:underline md:me-6">Home</a>
             </li>
