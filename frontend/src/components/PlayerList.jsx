@@ -32,7 +32,6 @@ function KeyPlayersList({teamID}){
 
     return (
     <div className="">
-      <h1>Key Players</h1>
       <div className="players-grid">
         {players.length > 0 ? (
           players.map((player) => (
