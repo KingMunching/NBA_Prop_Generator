@@ -1,39 +1,65 @@
   import React from 'react';
   import './Navbar.css';
+  import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu"
+
+
 
   function Navbar() {
     return (
-      <div>
-      <nav className="w-full" >
-        <div className="max-w-screen-xl  justify-between mx-auto ">          
-          <ul className="flex flex-wrap items-center justify-center space-x-6 p-5 ">
-            <li className="navbar-item">
-              <a href="#home" className="me-4 hover:underline md:me-6">Home</a>
-            </li>
-            <li className="navbar-item">
-              <a href="#teams" className="me-4 hover:underline md:me-6">Teams</a>
-            </li>
-            <li className="navbar-item">
-              <a href="#players" className="me-4 hover:underline md:me-6">Players</a>
-            </li>
-            <li className="navbar-item">
-              <a href="#analytics" className="me-4 hover:underline md:me-6">Analytics</a>
-            </li>
-            <li className="navbar-item">
-              <a href="http://localhost:8000/docs" className="me-4 hover:underline md:me-6" target="_blank" rel="noopener noreferrer">
-                API Docs
-              </a>
-            </li>
-          </ul>
-          
-          <div className="navbar-toggle" id="mobile-menu">
-            <span className="bar"></span>
-            <span className="bar"></span>
-            <span className="bar"></span>
-          </div>
+      <div className="flex w-full bg-transparent items-center text-white">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between py-4">
+      <NavigationMenu>
+      <NavigationMenuList>
+        
+        {/* Dropdown Menu Example */}
+        <NavigationMenuItem className="flex gap-4 list-none">
+          <NavigationMenuTrigger className="bg-transparent">Games</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <div className="grid gap-3 p-6 w-[400px]">
+              <NavigationMenuLink href="/games/today">
+                Today's Games
+              </NavigationMenuLink>
+              <NavigationMenuLink href="/games/upcoming">
+                Upcoming Games
+              </NavigationMenuLink>
+            </div>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
+        {/* Another Dropdown */}
+        <NavigationMenuItem>
+          <NavigationMenuTrigger className="bg-transparent">Player Props</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <div className="grid gap-3 p-6 w-[400px]">
+              <NavigationMenuLink href="/props/points">
+                Points
+              </NavigationMenuLink>
+              <NavigationMenuLink href="/props/rebounds">
+                Rebounds
+              </NavigationMenuLink>
+              {/* Add more prop types */}
+            </div>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
+        {/* Simple Link Example */}
+        
+
+      </NavigationMenuList>
+    </NavigationMenu>
         </div>
-      </nav>
       </div>
+    </div>
     );
   }
 

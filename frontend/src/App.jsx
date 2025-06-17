@@ -5,6 +5,18 @@ import PlayerCard from './components/PlayerCard';
 import KeyPlayersList from './components/PlayerList';
 import Navbar from './components/Navbar';
 import api from './api';
+import { Button } from "@/components/ui/button"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu"
+
 
 
 function App() {
@@ -18,11 +30,13 @@ function App() {
 
   return (
     <div className="App">
+      
       <Navbar />
       <header>
       </header>
 
       <main>
+        
         {/* ... your PropGeneratorForm and results section ... */}
 
         <section className="single-team-test-section">
