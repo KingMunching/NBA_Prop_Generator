@@ -12,7 +12,6 @@ from repositories.team_repository import TeamRepository
 from service.game_service import get_teams_from_today_games
     
 if __name__ == "__main__":
-    Base.metadata.create_all(bind=engine)
     # this will create (or fetch) the DB row for Dallas, then insert its current roster
     #team = load_team_and_roster("Washington Wizards")
     generator = PropGenerator(
