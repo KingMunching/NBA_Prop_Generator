@@ -41,7 +41,7 @@ class TeamRepository:
         .join(PlayerGameStat, PlayerModel.id == PlayerGameStat.player_id)\
         .filter(PlayerModel.team_id == team.id).group_by(PlayerModel.id)\
         .order_by(func.sum(cast(PlayerGameStat.min, Integer)).desc())
-        .limit(7).all()
+        .limit(3).all()
         )
 
         key_players = []
