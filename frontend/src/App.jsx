@@ -1,10 +1,13 @@
 // src/App.jsx
-// ... other imports ...
-import TeamDetail from './components/test'; 
-import PlayerCard from './components/PlayerCard';
-import KeyPlayersList from './components/PlayerList';
-import Navbar from './components/Navbar';
-import api from './api';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from './components/AuthContext'
+import TeamDetail from './components/test'
+import PlayerCard from './components/PlayerCard'
+import KeyPlayersList from './components/PlayerList'
+import Navbar from './components/Navbar'
+import Auth from './components/Auth'
+import Today from './components/PicksToday'
+import api from './api'
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -17,36 +20,33 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
 
-
-
-function App() {
-  // ... your existing state and useEffect for fetching all teams ...
-  // ... handlePropsGenerated function ...
-
-  // For testing, let's pick a team ID.
-  // Make sure a team with this ID exists in your database.
-  const testTeamId = 1 // Change this to an ID of an existing team in your DB
-  const testPlayerId = 111
-
+function MainAppContent() {
+  const testTeamId = 1
   return (
-    <div className="App">
-      
+    <>
       <Navbar />
-      <header>
-      </header>
-
-      <main>
-        
-        {/* ... your PropGeneratorForm and results section ... */}
-
-        <section className="single-team-test-section">
-         <KeyPlayersList teamID={testTeamId} />
-        </section>
-
-        {/* ... your existing teams-section for displaying all teams ... */}
-      </main>
-    </div>
-  );
+    </>
+  )
 }
 
-export default App;
+function App() {
+  const { user } = useAuth()
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Auth />} />
+        <Route path="/home" element={<MainAppContent />} />
+        <Route path="/picks/today" element={<Today />} />
+        <Route 
+          path="/*"
+          element={
+            user ? <MainAppContent /> : <Navigate to="/login" />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App

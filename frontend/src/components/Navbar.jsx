@@ -1,6 +1,8 @@
 import React from 'react';
 import { Trophy, Bell, User } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Link } from 'react-router-dom';
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -29,12 +31,13 @@ function Navbar() {
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList className="flex space-x-1">
               <NavigationMenuItem>
+                <Link to="/home">
                 <NavigationMenuLink 
-                  href="/"
                   className="text-white hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   Home
                 </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
