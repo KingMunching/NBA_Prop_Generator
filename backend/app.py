@@ -4,7 +4,7 @@ from database import engine, Base, SessionLocal
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
-from routers import team, player
+from routers import team, player, props
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -23,6 +23,7 @@ app.add_middleware(
 
 app.include_router(team.router)
 app.include_router(player.router)
+app.include_router(props.router)
 
 @app.get("/")
 def read_root():

@@ -7,6 +7,8 @@ import KeyPlayersList from './components/PlayerList'
 import Navbar from './components/Navbar'
 import Auth from './components/Auth'
 import Today from './components/PicksToday'
+import PropBetForm from './components/PropForm'
+import PropDisplay from './components/PropsDisplay'
 import api from './api'
 import { Button } from "@/components/ui/button"
 import {
@@ -38,6 +40,9 @@ function App() {
         <Route path="/login" element={<Auth />} />
         <Route path="/home" element={<MainAppContent />} />
         <Route path="/picks/today" element={<Today />} />
+        <Route path="/props" element={<PropBetForm />} />
+        <Route path="/props/results" element={<PropDisplay />} />
+
         <Route 
           path="/*"
           element={

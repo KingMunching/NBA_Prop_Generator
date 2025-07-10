@@ -24,7 +24,7 @@ function Navbar() {
               alt="PropBets AI Logo" 
               className="h-8 w-8 object-contain"
             />
-            <span className="text-white text-xl font-bold">NBA Props </span>
+            <span className="text-white text-xl font-bold">Hoop Intel </span>
           </div>
 
           {/* Navigation Links */}
@@ -41,41 +41,16 @@ function Navbar() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-white hover:text-blue-400 bg-transparent hover:bg-slate-800 data-[state=open]:bg-slate-800">
-                  Picks
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid gap-3 p-6 w-[400px] bg-slate-800 border border-slate-700">
-                    <NavigationMenuLink 
-                      href="/picks/today"
-                      className="text-white hover:text-blue-400 block px-3 py-2 rounded-md text-sm hover:bg-slate-700 transition-colors"
-                    >
-                      Today's Picks
-                    </NavigationMenuLink>
-                    <NavigationMenuLink 
-                      href="/picks/upcoming"
-                      className="text-white hover:text-blue-400 block px-3 py-2 rounded-md text-sm hover:bg-slate-700 transition-colors"
-                    >
-                      Upcoming Games
-                    </NavigationMenuLink>
-                    <NavigationMenuLink 
-                      href="/picks/favorites"
-                      className="text-white hover:text-blue-400 block px-3 py-2 rounded-md text-sm hover:bg-slate-700 transition-colors"
-                    >
-                      My Favorites
-                    </NavigationMenuLink>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
+                <Link to="/props">
                 <NavigationMenuLink 
-                  href="/leaderboard"
                   className="text-white hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
-                  Leaderboard
+                  Props
                 </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
+
+             
 
               <NavigationMenuItem>
                 <NavigationMenuLink 
@@ -86,33 +61,7 @@ function Navbar() {
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-white hover:text-blue-400 bg-transparent hover:bg-slate-800 data-[state=open]:bg-slate-800">
-                  Tools
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid gap-3 p-6 w-[400px] bg-slate-800 border border-slate-700">
-                    <NavigationMenuLink 
-                      href="/tools/calculator"
-                      className="text-white hover:text-blue-400 block px-3 py-2 rounded-md text-sm hover:bg-slate-700 transition-colors"
-                    >
-                      Odds Calculator
-                    </NavigationMenuLink>
-                    <NavigationMenuLink 
-                      href="/tools/analytics"
-                      className="text-white hover:text-blue-400 block px-3 py-2 rounded-md text-sm hover:bg-slate-700 transition-colors"
-                    >
-                      Player Analytics
-                    </NavigationMenuLink>
-                    <NavigationMenuLink 
-                      href="/tools/trends"
-                      className="text-white hover:text-blue-400 block px-3 py-2 rounded-md text-sm hover:bg-slate-700 transition-colors"
-                    >
-                      Trend Analysis
-                    </NavigationMenuLink>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+              
             </NavigationMenuList>
           </NavigationMenu>
 
