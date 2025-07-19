@@ -26,7 +26,8 @@ function MainAppContent() {
   const testTeamId = 1
   return (
     <>
-      <Navbar />
+      <Navbar /> 
+      {}
     </>
   )
 }
