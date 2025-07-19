@@ -67,13 +67,6 @@ class PlayerWithStats(PlayerResponse):
         from_attributes = True
 
 
-class PropRequestBase(BaseModel):
-    prop_type: str = Field(..., description="Type of prop (pts, ast, reb, etc.)")
-    stat: int = Field(..., description="Threshold value (e.g., 15 points)")
-    num_games: int = Field(20, description="Number of games to analyze")
-    num_rec: int = Field(5, description="Number of recommendations to return")
-    threshold: float = Field(0.8, description="Minimum success rate (0.0-1.0)")
-
 """
 class PropResponse(BaseModel):
     player_id: int
@@ -90,3 +83,11 @@ class PropResponse(BaseModel):
     threshold: float
     num_games: int
     num_rec: int
+
+class PropCreate(BaseModel):
+    user_id: str
+    player_name: str
+    prop_type: str
+    prop_value: float
+    threshold: str
+    game_date: date

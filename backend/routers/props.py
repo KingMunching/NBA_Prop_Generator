@@ -5,6 +5,7 @@ from database import SessionLocal
 from schemas import PropResponse
 from service.prop_service import PropGenerator
 from models.team_model import Team
+import os
 
 router = APIRouter(
     prefix="/props",
@@ -25,8 +26,9 @@ async def generate_prop(request: PropResponse, db: Session = Depends(get_db)):
     team1 = db.query(Team).filter(Team.name == "Los Angeles Lakers").first()
 
     team2 = db.query(Team).filter(Team.name == "Golden State Warriors").first()
-
-    teams = [team1, team2]
+    team3 = db.query(Team).filter(Team.name == "Indiana Pacers").first()
+    team4 = db.query(Team).filter(Team.name == "Dallas Mavericks").first()
+    teams = [team1, team2, team3]
     if not teams:
         return{"error": "No teams found in database"}
     
@@ -39,4 +41,5 @@ async def generate_prop(request: PropResponse, db: Session = Depends(get_db)):
     )
     props = prop_generator.generate_daily_props(teams)
     return props
+
 
