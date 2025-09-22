@@ -11,6 +11,9 @@ from sqlalchemy import func, desc
 from helpers.nba_api_helper import safe_team_roster, get_team_id
 from nba_api.stats.endpoints import commonplayerinfo, teamplayerdashboard
 from repositories.team_repository import TeamRepository
+from repositories import prop_repository
+from schemas import PropCreate
+
 
 
 
@@ -116,3 +119,9 @@ class PropGenerator:
 
         # Generate props for the collected players
         return self.generate_props(unique_players)
+    
+def create_prop(db, prop: PropCreate):
+    return prop_repository.create_prop(db, prop)
+
+def get_props_by_user(db, user_id):
+    return prop_repository.get_props_by_user(db, user_id)

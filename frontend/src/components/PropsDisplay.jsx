@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, TrendingUp, Users, Target, Zap, RefreshCw } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Users, Target, Zap, RefreshCw, Plus, PlusCircle } from 'lucide-react';
 import Navbar from './Navbar';
 
 const PropDisplay = () => {
@@ -53,6 +53,10 @@ const PropDisplay = () => {
     const handleNewSearch = () => {
         navigate('/props');
     };
+
+    const handleSave = () => {
+
+    }
 
     const Icon = getPropTypeIcon(searchCriteria.propType);
 
@@ -126,7 +130,7 @@ const PropDisplay = () => {
                                             <Icon className="h-5 w-5 text-blue-400" />
                                         </CardTitle>
                                         <p className="text-slate-400 text-sm">
-                                            {prop.prop_type} Over {prop.stat}
+                                            {prop.prop_type.toUpperCase()} Over {prop.stat}
                                         </p>
                                     </CardHeader>
                                     <CardContent className="space-y-3">
@@ -161,6 +165,15 @@ const PropDisplay = () => {
                                             </div>
                                         </div>
                                         
+                                        <div>
+                                            <Button
+                                                onClick={handleSave}
+                                                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                                            >
+                                            <PlusCircle className="h-4 w-4 mr-2 " />
+                                                Save
+                                                </Button>
+                                        </div>
                                         {/* Action Button */}
                                         <Button 
                                             className="w-full mt-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-md transition-all duration-200"
@@ -174,8 +187,10 @@ const PropDisplay = () => {
                                         </Button>
                                     </CardContent>
                                 </Card>
+                                
                             ))}
                         </div>
+                        
                     ) : (
                         <div className="text-center py-16">
                             <div className="bg-slate-800 border-slate-700 rounded-lg p-8 shadow-xl max-w-md mx-auto">

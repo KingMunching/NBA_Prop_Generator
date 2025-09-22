@@ -35,7 +35,7 @@ const PropBetForm = () => {
             if (response.data.error) {
                 setError(`Error: ${response.data.error}`);
             } else {
-                // Navigate to results page with data and search criteria
+                // Navigate to results page with data and hh criteria
                 navigate('/props/results', {
                     state: {
                         props: response.data,
@@ -262,7 +262,7 @@ const PropBetForm = () => {
                             </div>
                         )}
 
-                        {/* Info Section */}
+                        {/* Info Section x*/}
                         <div className="bg-slate-700/50 p-4 rounded-lg">
                             <h3 className="text-white font-medium mb-2">How it works:</h3>
                             <ul className="text-slate-300 text-sm space-y-1">

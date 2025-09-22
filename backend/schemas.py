@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from datetime import date
+from datetime import date, datetime
+
+from uuid import UUID
 
 
 class PlayerBase(BaseModel):
@@ -90,3 +92,23 @@ class PropResponse(BaseModel):
     threshold: float
     num_games: int
     num_rec: int
+
+"""
+    returning a list of saved bets to the user
+"""
+
+class PropCreate(BaseModel):
+    user_id: UUID
+    prop_type: str
+    stat: int
+    threshold: float
+    num_games: int
+    num_players: int 
+
+class PropSavedResponse(PropCreate):
+    id: UUID
+    created_at: datetime
+
+class UserPropsResponse(BaseModel):
+    props: List[PropResponse]
+    
