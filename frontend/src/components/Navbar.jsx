@@ -41,13 +41,23 @@ function Navbar() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link to="/props">
-                <NavigationMenuLink 
-                  className="text-white hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                >
-                  Props
-                </NavigationMenuLink>
-                </Link>
+                <NavigationMenuTrigger className=" text-white hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-transparent"
+                >Props
+                </NavigationMenuTrigger >
+                <NavigationMenuContent className="bg-slate-800 text-white">
+                  <ul className="grid w-[200px] gap-4">
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link to="/props/form" className="text-white hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-transparent">
+                        Generate Props</Link>
+                      </NavigationMenuLink>
+                      <NavigationMenuLink asChild>
+                        <Link to="/props" className="text-white hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-transparent">
+                        My Props</Link>
+                      </NavigationMenuLink>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
               </NavigationMenuItem>
 
              

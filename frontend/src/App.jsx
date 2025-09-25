@@ -9,6 +9,7 @@ import Auth from './components/Auth'
 import Today from './components/PicksToday'
 import PropBetForm from './components/PropForm'
 import PropDisplay from './components/PropsDisplay'
+import UserProps from './components/UserProps'
 import api from './api'
 import { Button } from "@/components/ui/button"
 import {
@@ -21,6 +22,7 @@ import {
   NavigationMenuTrigger,
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
+import { User } from 'lucide-react'
 
 function MainAppContent() {
   const testTeamId = 1
@@ -41,8 +43,10 @@ function App() {
         <Route path="/login" element={<Auth />} />
         <Route path="/home" element={<MainAppContent />} />
         <Route path="/picks/today" element={<Today />} />
-        <Route path="/props" element={<PropBetForm />} />
+        <Route path="/props/form" element={<PropBetForm />} />
         <Route path="/props/results" element={<PropDisplay />} />
+        <Route path="/props" element={<UserProps />} />
+        
 
         <Route 
           path="/*"

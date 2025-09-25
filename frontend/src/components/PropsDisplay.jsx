@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { data, useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, TrendingUp, Users, Target, Zap, RefreshCw, Plus, PlusCircle } from 'lucide-react';
 import Navbar from './Navbar';
+import api from "../api"; 
+import { supabase } from "../lib/supabase"; 
 
 const PropDisplay = () => {
     const location = useLocation();
@@ -47,16 +49,51 @@ const PropDisplay = () => {
     };
 
     const handleBackToForm = () => {
-        navigate('/props');
+        navigate('/props/form');
     };
 
     const handleNewSearch = () => {
-        navigate('/props');
+        navigate('/props/form');
     };
 
-    const handleSave = () => {
+    const handleSave = async (prop) => {
+        try {
+            // get JWT from Supabase
+            const { data, error } = await supabase.auth.getSession();
+            if (error || !data.session) {
+            alert("You must be logged in to save props.");
+            return;
+            }
+            const token = data.session.access_token;
+            
+            const response = await api.post(
+            "/props/save",
+            {
+                prop_type: prop.prop_type,
+                stat: prop.stat,
+                threshold: searchCriteria.minThreshold / 100, // convert % to decimal
+                num_games: parseInt(searchCriteria.numGames),
+                player_name: prop.player_name,
+            },
+            {
+                headers: {
+                Authorization: `Bearer ${token}`, // attach JWT
+                },
+            }
+            
+            );
 
-    }
+            console.log("Saved prop:", response.data);
+            alert(`Saved prop for ${prop.player_name}`);
+        } catch (err) {
+            console.error("Error saving prop:", err);
+  const message =
+    err.response?.data?.detail ||
+    err.message ||
+    "Unknown error";
+  alert("Error saving prop: " + message);
+        }
+        };
 
     const Icon = getPropTypeIcon(searchCriteria.propType);
 
@@ -167,7 +204,7 @@ const PropDisplay = () => {
                                         
                                         <div>
                                             <Button
-                                                onClick={handleSave}
+                                                onClick= {() => handleSave(prop)}
                                                 className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
                                             >
                                             <PlusCircle className="h-4 w-4 mr-2 " />

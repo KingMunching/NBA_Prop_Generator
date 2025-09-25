@@ -76,34 +76,34 @@ class PropRequestBase(BaseModel):
     num_rec: int = Field(5, description="Number of recommendations to return")
     threshold: float = Field(0.8, description="Minimum success rate (0.0-1.0)")
 
-"""
-class PropResponse(BaseModel):
+class PropGeneratedResponse(BaseModel):
     player_id: int
     player_name: str
     success_rate: float
     games_analyzed: int
     prop_type: str
     stat: int
-"""
 
 class PropResponse(BaseModel):
+    id: UUID
+    user_id: UUID
     prop_type: str
     stat: int
     threshold: float
     num_games: int
-    num_rec: int
+    player_name: str
+    created_at: datetime 
 
 """
     returning a list of saved bets to the user
 """
 
 class PropCreate(BaseModel):
-    user_id: UUID
     prop_type: str
     stat: int
     threshold: float
     num_games: int
-    num_players: int 
+    player_name: str
 
 class PropSavedResponse(PropCreate):
     id: UUID

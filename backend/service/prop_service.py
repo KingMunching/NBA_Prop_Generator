@@ -120,8 +120,11 @@ class PropGenerator:
         # Generate props for the collected players
         return self.generate_props(unique_players)
     
-def create_prop(db, prop: PropCreate):
-    return prop_repository.create_prop(db, prop)
+def create_prop(db, prop: PropCreate, user_id:str):
+    return prop_repository.create_prop(db, prop, user_id)
 
 def get_props_by_user(db, user_id):
     return prop_repository.get_props_by_user(db, user_id)
+
+def delete_prop(db, user_id, prop_id):
+    prop_repository.delete_prop(db, user_id, prop_id)
