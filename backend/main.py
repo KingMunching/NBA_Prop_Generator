@@ -10,43 +10,11 @@ from service.player_service import get_player_by_name
 from repositories.player_repository import PlayerRepository
 from repositories.team_repository import TeamRepository
 from service.game_service import get_teams_from_today_games
-    
+from nba_api.stats.static import players
+from helpers.nba_api_helper import get_roster_df
+
 if __name__ == "__main__":
-    # this will create (or fetch) the DB row for Dallas, then insert its current roster
-    #team = load_team_and_roster("Washington Wizards")
-    generator = PropGenerator(
-        prop_type="pts",
-        stat=20,                  # Threshold value (e.g., 15 points)
-        num_games=20,
-        num_rec=10,
-        threshold=0.5      # Minimum success rate of 80%
-    )
+   print(get_roster_df(1610612742))
 
-    # Load teams and players (example)
-    teams_today = get_teams_from_today_games()
-    props = generator.generate_daily_props(teams_today)
-    
-
-    # Print results
-    for prop in props:
-       print(f"{prop['player_name']}: {prop['success_rate']:.2%} success rate")
-    
-    """
-    #Query all players
-    db = SessionLocal()
-    player_repo = PlayerRepository(db)
-    players = player_repo.get_players()
-    #print(len(players))
-         #load stats
-    for player in players:
-        try:
-            if player.stats.count() >= 20:
-               continue
-            load_last_n_games(player)
-            print(f"Loaded stats for {player.name}")
-        except Exception as e:
-            print(f"Failed for {player.name}: {e}")
-        time.sleep(0.2)
-    """
     
 

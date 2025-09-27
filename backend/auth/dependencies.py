@@ -15,5 +15,5 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
             raise HTTPException(status_code=401, detail="Invalid token: no user_id")
         return user_id
     except Exception:
-        print("❌ JWT decode failed:", e)
+        print("❌ JWT decode failed:")
         raise HTTPException(status_code=401, detail="Invalid or expired token")

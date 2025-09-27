@@ -19,11 +19,12 @@ def get_team_id(team_name: str) -> int:
 """Fetch the raw roster and return a DataFrame with 
     ['PLAYER','PLAYER_ID'].
 """
-def get_roster_df(team_id: int, season: str = "2024-25") -> pd.DataFrame:
+"""
+def get_roster_df(team_id: int, season: str = "2025-26") -> pd.DataFrame:
     roster = commonteamroster.CommonTeamRoster(team_id=team_id, season=season)
     df = pd.DataFrame(roster.get_data_frames()[0])
     return df[["PLAYER", "PLAYER_ID"]]
-
+"""
 
 
 def safe_player_log(player_id, **opts):
@@ -36,15 +37,35 @@ def safe_player_log(player_id, **opts):
         **opts
     )
 
+"""
 def safe_team_roster(team_id, **opts):
-    """
-    Fetch a team's roster with automatic retries on connection errors.
-    Returns a DataFrame with ['PLAYER', 'PLAYER_ID'].
-    """
+    
     roster = retry_nba_call(
         commonteamroster.CommonTeamRoster,
         team_id=team_id,
         **opts
     )
+    df = pd.DataFrame(roster.get_data_frames()[0])
+    return df[["PLAYER", "PLAYER_ID"]]
+
+"""
+
+
+def get_team_roster(team_id: int, season: str = None, safe: bool = True) -> pd.DataFrame:
+    """
+    Fetch a team's roster for a given season.
+    - If safe=True, wraps the call with retry_nba_call for robustness.
+    - If safe=False, calls the NBA API directly.
+    Returns a DataFrame with ['PLAYER', 'PLAYER_ID'].
+    """
+    kwargs = {"team_id": team_id}
+    if season:
+        kwargs["season"] = season
+
+    if safe:
+        roster = retry_nba_call(commonteamroster.CommonTeamRoster, **kwargs)
+    else:
+        roster = commonteamroster.CommonTeamRoster(**kwargs)
+
     df = pd.DataFrame(roster.get_data_frames()[0])
     return df[["PLAYER", "PLAYER_ID"]]
