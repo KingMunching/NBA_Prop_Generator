@@ -18,7 +18,7 @@ def load_player_stats(player):
 def get_player_by_name(name):
     db = SessionLocal()
     try:
-        player = db.query(Player).filter(Player.name == name).first()
+        player = db.query(Player).filter(Player.player_name == name).first()
         return player
     finally:
         db.close()

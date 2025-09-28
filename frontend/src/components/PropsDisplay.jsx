@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, TrendingUp, Users, Target, Zap, RefreshCw, Plus, PlusCircle } from 'lucide-react';
 import Navbar from './Navbar';
+import PropCard from './PropCard';
 import api from "../api"; 
 import { supabase } from "../lib/supabase"; 
 
@@ -74,6 +75,8 @@ const PropDisplay = () => {
                 threshold: searchCriteria.minThreshold / 100, // convert % to decimal
                 num_games: parseInt(searchCriteria.numGames),
                 player_name: prop.player_name,
+                nba_id: prop.nba_id,
+                success_rate: prop.success_rate,
             },
             {
                 headers: {
@@ -160,71 +163,13 @@ const PropDisplay = () => {
                     {props.length > 0 ? (
                         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                             {props.map((prop, index) => (
-                                <Card key={prop.player_id || index} className="bg-slate-800 border-slate-700 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
-                                    <CardHeader className="pb-3">
-                                        <CardTitle className="text-white text-xl font-bold flex items-center justify-between">
-                                            <span>{prop.player_name}</span>
-                                            <Icon className="h-5 w-5 text-blue-400" />
-                                        </CardTitle>
-                                        <p className="text-slate-400 text-sm">
-                                            {prop.prop_type.toUpperCase()} Over {prop.stat}
-                                        </p>
-                                    </CardHeader>
-                                    <CardContent className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-slate-300 text-sm">Success Rate:</span>
-                                            <span className={`font-bold text-lg ${
-                                                prop.success_rate >= 0.9 ? 'text-green-400' : 
-                                                prop.success_rate >= 0.8 ? 'text-blue-400' : 
-                                                'text-yellow-400'
-                                            }`}>
-                                                {(prop.success_rate * 100).toFixed(1)}%
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-slate-300 text-sm">Games Analyzed:</span>
-                                            <span className="text-blue-400 font-medium">
-                                                {prop.games_analyzed}
-                                            </span>
-                                        </div>
-                                        
-                                        {/* Success Rate Visual Bar */}
-                                        <div className="space-y-2">
-                                            <div className="w-full bg-slate-700 rounded-full h-2">
-                                                <div 
-                                                    className={`h-2 rounded-full transition-all duration-300 ${
-                                                        prop.success_rate >= 0.9 ? 'bg-green-400' : 
-                                                        prop.success_rate >= 0.8 ? 'bg-blue-400' : 
-                                                        'bg-yellow-400'
-                                                    }`}
-                                                    style={{ width: `${prop.success_rate * 100}%` }}
-                                                />
-                                            </div>
-                                        </div>
-                                        
-                                        <div>
-                                            <Button
-                                                onClick= {() => handleSave(prop)}
-                                                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
-                                            >
-                                            <PlusCircle className="h-4 w-4 mr-2 " />
-                                                Save
-                                                </Button>
-                                        </div>
-                                        {/* Action Button */}
-                                        <Button 
-                                            className="w-full mt-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-md transition-all duration-200"
-                                            size="sm"
-                                            onClick={() => {
-                                                // Add functionality for viewing details
-                                                console.log('View details for:', prop.player_name);
-                                            }}
-                                        >
-                                            View Details
-                                        </Button>
-                                    </CardContent>
-                                </Card>
-                                
+                                <PropCard 
+                                    key={prop.nba_id || index}
+                                    prop={prop}
+                                    onSave={handleSave}
+                                    onViewDetails={(prop) => console.log('View details for:', prop.player_name)}
+                                    isSaved={false}
+                                />
                             ))}
                         </div>
                         

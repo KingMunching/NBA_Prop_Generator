@@ -58,7 +58,7 @@ async def generate_prop(request: PropRequestBase, db: Session = Depends(get_db))
         stat=request.stat,
         threshold=request.threshold,
         num_games=request.num_games,
-        num_rec=request.num_rec
+        num_rec=request.num_rec,
     )
     props = prop_generator.generate_daily_props(teams)
     return props

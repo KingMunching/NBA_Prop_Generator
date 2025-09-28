@@ -14,4 +14,7 @@ class Prop(Base):
     threshold = Column(Float, nullable=False)
     num_games = Column(Integer, nullable=False)
     player_name = Column(String, nullable=False)
+    nba_id = Column(Integer, nullable=False)
+    success_rate = Column(Float, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+   

@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BookmarkCheck, TrendingUp, Users, Target, Zap, RefreshCw, Trash2, Calendar, BarChart3 } from 'lucide-react';
 import Navbar from './Navbar';
+import PropCard from './PropCard';
+
 import api from "../api"; 
 import { supabase } from "../lib/supabase"; 
 
@@ -12,6 +14,7 @@ const UserProps = () => {
     const [savedProps, setSavedProps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
 
     useEffect(() => {
         fetchSavedProps();
@@ -210,94 +213,15 @@ const UserProps = () => {
                     {/* Results Section */}
                     {savedProps.length > 0 ? (
                         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                            {savedProps.map((prop, index) => {
-                                const Icon = getPropTypeIcon(prop.prop_type);
-                                return (
-                                    <Card key={prop.id || index} className="bg-slate-800 border-slate-700 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
-                                        <CardHeader className="pb-3">
-                                            <CardTitle className="text-white text-xl font-bold flex items-center justify-between">
-                                                <span>{prop.player_name || `${getPropTypeLabel(prop.prop_type)} Prop`}</span>
-                                                <Icon className="h-5 w-5 text-blue-400" />
-                                            </CardTitle>
-                                            <p className="text-slate-400 text-sm">
-                                                {prop.prop_type.toUpperCase()} Over {prop.stat}
-                                            </p>
-                                        </CardHeader>
-                                        <CardContent className="space-y-3">
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-slate-300 text-sm">Min Success Rate:</span>
-                                                <span className={`font-bold text-lg ${
-                                                    prop.threshold >= 0.9 ? 'text-green-400' : 
-                                                    prop.threshold >= 0.8 ? 'text-blue-400' : 
-                                                    'text-yellow-400'
-                                                }`}>
-                                                    {(prop.threshold * 100).toFixed(1)}%
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-slate-300 text-sm">Games Analyzed:</span>
-                                                <span className="text-blue-400 font-medium">
-                                                    {prop.num_games}
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-slate-300 text-sm">Players Searched:</span>
-                                                <span className="text-blue-400 font-medium">
-                                                    {prop.player_name}
-                                                </span>
-                                            </div>
-                                            
-                                            {/* Success Rate Visual Bar */}
-                                            <div className="space-y-2">
-                                                <div className="w-full bg-slate-700 rounded-full h-2">
-                                                    <div 
-                                                        className={`h-2 rounded-full transition-all duration-300 ${
-                                                            prop.threshold >= 0.9 ? 'bg-green-400' : 
-                                                            prop.threshold >= 0.8 ? 'bg-blue-400' : 
-                                                            'bg-yellow-400'
-                                                        }`}
-                                                        style={{ width: `${prop.threshold * 100}%` }}
-                                                    />
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Date saved */}
-                                            <div className="flex items-center justify-between text-xs">
-                                                <span className="text-slate-400 flex items-center">
-                                                    <Calendar className="h-3 w-3 mr-1" />
-                                                    Saved:
-                                                </span>
-                                                <span className="text-slate-300">
-                                                    {formatDate(prop.created_at)}
-                                                </span>
-                                            </div>
-                                            
-                                            {/* Action Buttons */}
-                                            <div className="flex space-x-2 pt-2">
-                                                <Button 
-                                                    className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-2 rounded-md transition-all duration-200"
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        // Add functionality for viewing details
-                                                        console.log('View details for:', prop);
-                                                    }}
-                                                >
-                                                    <BarChart3 className="h-4 w-4 mr-1" />
-                                                    Details
-                                                </Button>
-                                                <Button 
-                                                    variant="outline"
-                                                    size="sm"
-                                                    className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white transition-all duration-200"
-                                                    onClick={() => handleDelete(prop.id)}
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                );
-                            })}
+                            {savedProps.map((prop, index) => (
+                                    <PropCard 
+                                        key={prop.id || index}
+                                        prop={prop}
+                                        onDelete={handleDelete}
+                                        onViewDetails={(prop) => console.log('View details for:', prop)}
+                                        isSaved={true}
+                                    />
+                                ))}
                         </div>
                     ) : (
                         <div className="text-center py-16">

@@ -13,8 +13,8 @@ class TeamRepository:
     def get_teams(self):
         return self.db.query(TeamModel).all()
     
-    def get_team_by_id(self, team_id: int):
-        return self.db.query(TeamModel).filter(TeamModel.id == team_id).first()
+    #def get_team_by_id(self, team_id: int):
+    #    return self.db.query(TeamModel).filter(TeamModel.nba_id == team_id).first()
     
     def get_team_by_name(self, team_name: str):
         return self.db.query(TeamModel).filter(TeamModel.name == team_name).first()

@@ -7,7 +7,7 @@ class Player(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nba_id = Column(Integer, unique=True, nullable=False, index=True)
-    name = Column(String)
+    player_name = Column(String)
     team_nba_id = Column(Integer, ForeignKey("teams.nba_id"), nullable=False)
 
     
@@ -24,3 +24,5 @@ class Player(Base):
         order_by="desc(PlayerGameStat.date)",
         lazy="dynamic"
     )
+
+    

@@ -8,7 +8,7 @@ from service.game_service import get_teams_from_today_games
 from service.team_service import load_team_and_roster
 from service.player_stats_service import get_last_n_stats
 from sqlalchemy import func, desc
-from helpers.nba_api_helper import safe_team_roster, get_team_id
+from helpers.nba_api_helper import get_team_id
 from nba_api.stats.endpoints import commonplayerinfo, teamplayerdashboard
 from repositories.team_repository import TeamRepository
 from repositories import prop_repository
@@ -94,8 +94,9 @@ class PropGenerator:
             success_rate, games_analyzed = self.analyze_player(player)
             if games_analyzed > 0 and success_rate >= self.threshold:
                props.append({
-                   "player_id": player.id,
-                   "player_name": player.name,
+                   "nba_id": player.nba_id,
+                   "player_name": player.player_name,
+                   "team_nba_id": player.team_nba_id,
                    "success_rate": success_rate,
                    "games_analyzed": games_analyzed,
                    "prop_type": self.prop_type,

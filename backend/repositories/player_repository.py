@@ -8,8 +8,8 @@ class PlayerRepository:
     def get_players(self):
         return self.db.query(PlayerModel).all()
 
-    def get_player_by_id(self, player_id: int):
-        return self.db.query(PlayerModel).filter(PlayerModel.id == player_id).first()
+    #def get_player_by_id(self, player_id: int):
+    #   return self.db.query(PlayerModel).filter(PlayerModel.nb == player_id).first()
 
     def get_player_by_nba_id(self, nba_id: int):
         return self.db.query(PlayerModel).filter(PlayerModel.nba_id == nba_id).first()

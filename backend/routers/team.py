@@ -35,7 +35,7 @@ def get_today_teams(db: Session = Depends(get_db)):
 @router.get("/{team_id}", response_model=TeamResponse)
 def get_team(team_id:int,db: Session = Depends(get_db)):
     team_repo = TeamRepository(db)
-    team = team_repo.get_team_by_id(team_id)
+    team = team_repo.get_team_by_nba_id(team_id)
     if team:
         return team
     else:
@@ -45,7 +45,7 @@ def get_team(team_id:int,db: Session = Depends(get_db)):
 @router.get("/{team_id}/key-players", response_model=List[PlayerResponse])
 def get_key_players(team_id: int, db: Session = Depends(get_db)):
     team_repo = TeamRepository(db)
-    team = team_repo.get_team_by_id(team_id)
+    team = team_repo.get_team_by_nba_id(team_id)
     if team:
         key_players = team_repo.get_key_players(team)
         return key_players

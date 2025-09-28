@@ -12,6 +12,8 @@ def create_prop(db: Session, prop: PropCreate, user_id: str):
         threshold=prop.threshold,
         num_games=prop.num_games,
         player_name = prop.player_name,
+        nba_id = prop.nba_id,
+        success_rate = prop.success_rate,
     )
     db.add(db_prop)
     db.commit()
