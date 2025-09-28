@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 from typing import List, Optional
 from datetime import date, datetime
 
@@ -6,9 +6,12 @@ from uuid import UUID
 
 
 class PlayerBase(BaseModel):
-    name: str
+    player_name: str
     nba_id: int
-    team_id: int
+    team_nba_id: int
+
+    class Config:
+        from_attributes = True
 
 
 class PlayerCreate(PlayerBase):
@@ -32,7 +35,7 @@ class TeamCreate(TeamBase):
 
 
 class TeamResponse(TeamBase):
-    id: int
+    nba_id: int
     players: Optional[List[PlayerResponse]] = []
 
     class Config:
@@ -74,11 +77,9 @@ class PropRequestBase(BaseModel):
     stat: int = Field(..., description="Threshold value (e.g., 15 points)")
     num_games: int = Field(20, description="Number of games to analyze")
     num_rec: int = Field(5, description="Number of recommendations to return")
-    threshold: float = Field(0.8, description="Minimum success rate (0.0-1.0)")
+    threshold: float = Field(0.8, descriptivon="Minimum success rate (0.0-1.0)")
 
-class PropGeneratedResponse(BaseModel):
-    player_id: int
-    player_name: str
+class PropGeneratedResponse(PlayerBase):
     success_rate: float
     games_analyzed: int
     prop_type: str
@@ -92,7 +93,15 @@ class PropResponse(BaseModel):
     threshold: float
     num_games: int
     player_name: str
+    nba_id: int
     created_at: datetime 
+    success_rate: float
+
+    @computed_field
+    @property
+    def headshot_url(self) -> str:
+        return f"https://cdn.nba.com/headshots/nba/latest/260x190/{self.nba_id}.png"
+    
 
 """
     returning a list of saved bets to the user
@@ -104,6 +113,8 @@ class PropCreate(BaseModel):
     threshold: float
     num_games: int
     player_name: str
+    nba_id: int
+    success_rate: float
 
 class PropSavedResponse(PropCreate):
     id: UUID
@@ -111,4 +122,5 @@ class PropSavedResponse(PropCreate):
 
 class UserPropsResponse(BaseModel):
     props: List[PropResponse]
+
     
