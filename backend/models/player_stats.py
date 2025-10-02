@@ -17,6 +17,7 @@ class PlayerGameStat(Base):
     stl = Column(Integer, default=0)
     blk = Column(Integer, default=0)
     tov = Column(Integer, default=0)
+    three_pm = Column(Integer, default=0)
 
     player = relationship(
         "Player",

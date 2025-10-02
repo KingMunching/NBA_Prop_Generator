@@ -46,10 +46,13 @@ async def delete_prop(prop_id: UUID,
 async def generate_prop(request: PropRequestBase, db: Session = Depends(get_db)):
     #Testing teams. I would use get_today_teams if nba was live
     team1 = db.query(Team).filter(Team.name == "Los Angeles Lakers").first()
-
     team2 = db.query(Team).filter(Team.name == "Golden State Warriors").first()
+    team3 = db.query(Team).filter(Team.name == "Toronto Raptors").first()
+    team4 = db.query(Team).filter(Team.name == "Detroit Pistons").first()
 
-    teams = [team1, team2]
+
+
+    teams = [team1, team2, team3, team4]
     if not teams:
         return{"error": "No teams found in database"}
     

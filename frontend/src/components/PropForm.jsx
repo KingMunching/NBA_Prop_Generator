@@ -23,7 +23,7 @@ const PropBetForm = () => {
         setIsLoading(true);
 
         const payload = {
-            prop_type: propType.toLowerCase(),
+            prop_type: propType,
             stat: parseInt(stat),
             threshold: parseFloat(minThreshold) / 100,
             num_games: parseInt(numGames),

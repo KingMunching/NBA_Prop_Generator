@@ -51,6 +51,7 @@ class PlayerStatRepository:
                 stl=row.STL,
                 blk=row.BLK,
                 tov=row.TOV,
+                three_pm=row.FG3M,
                 min=row.MIN
             )
             self.db.add(stat)

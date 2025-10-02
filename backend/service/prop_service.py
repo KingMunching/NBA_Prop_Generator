@@ -63,19 +63,19 @@ class PropGenerator:
     def count_sucesses(self, recent_stats: List[PlayerGameStat]) -> int:
         count = 0
         for stat in recent_stats:
-            if self.prop_type == "pts" and stat.pts >= self.stat:
+            if self.prop_type == "PTS" and stat.pts >= self.stat:
                 count += 1
-            elif self.prop_type == "ast" and stat.ast >= self.stat:
+            elif self.prop_type == "ASR" and stat.ast >= self.stat:
                 count += 1
-            elif self.prop_type == "reb" and stat.reb >= self.stat:
+            elif self.prop_type == "REB" and stat.reb >= self.stat:
                 count += 1
-            elif self.prop_type == "stl" and stat.stl >= self.stat:
+            elif self.prop_type == "STL" and stat.stl >= self.stat:
                 count += 1
-            elif self.prop_type == "blk" and stat.blk >= self.stat:
+            elif self.prop_type == "BLK" and stat.blk >= self.stat:
                 count += 1
-            elif self.prop_type == "tov" and stat.tov >= self.stat:
+            elif self.prop_type == "TOV" and stat.tov >= self.stat:
                 count += 1
-            elif self.prop_type == "pts+reb+ast" and (stat.pts + stat.reb + stat.ast) >= self.stat:
+            elif self.prop_type == "3PM" and stat.three_pm >= self.stat:
                 count += 1
         return count
     
@@ -97,7 +97,7 @@ class PropGenerator:
                    "nba_id": player.nba_id,
                    "player_name": player.player_name,
                    "team_nba_id": player.team_nba_id,
-                   "success_rate": success_rate,
+                "success_rate": success_rate,
                    "games_analyzed": games_analyzed,
                    "prop_type": self.prop_type,
                    "stat": self.stat

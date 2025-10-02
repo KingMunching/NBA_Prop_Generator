@@ -52,11 +52,13 @@ const PropCard = ({ prop, onSave, onDelete, onViewDetails, isSaved = false }) =>
                     <div className="flex-1 min-w-0">
                         <CardTitle className="text-white text-lg font-bold flex items-center gap-2 flex-wrap">
                             <span className="truncate">{prop.player_name}</span>
-                            <Icon className="h-5 w-5 text-blue-400 flex-shrink-0" />
+                            
                         </CardTitle>
-                        <p className="text-slate-400 text-sm mt-1">
-                            {prop.prop_type.toUpperCase()} Over {prop.stat}
-                        </p>
+                           <div className="mt-1.5 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/20 rounded-md px-3 py-1.5">
+                            <p className="text-slate-300 text-sm">
+                                {getPropTypeLabel(prop.prop_type)} Over <span className="font-bold text-white">{prop.stat}</span>
+                            </p>
+                        </div>
                     </div>
                     <div className="bg-slate-700/50 rounded-lg p-2 border border-slate-600 flex-shrink-0">
                         {headshotUrl && !imageError ? (
