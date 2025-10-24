@@ -9,8 +9,15 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app/backend
+    depends_on:
+      - redis
     environment:
       - PYTHONPATH=/app/backend
+  
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
 
   frontend:
     build:
