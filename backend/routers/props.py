@@ -8,6 +8,7 @@ from models.team_model import Team
 from uuid import UUID
 from service import prop_service
 from auth.dependencies import get_current_user
+from service.game_service import get_teams_from_today_games
 
 router = APIRouter(
     prefix="/props",
@@ -50,9 +51,10 @@ async def generate_prop(request: PropRequestBase, db: Session = Depends(get_db))
     team3 = db.query(Team).filter(Team.name == "Toronto Raptors").first()
     team4 = db.query(Team).filter(Team.name == "Detroit Pistons").first()
 
+    #team_repo = TeamRepository(db)
+    #teams = get_teams_from_today_games(team_repo)
 
-
-    teams = [team1, team2, team3, team4]
+    teams = get_teams_from_today_games()
     if not teams:
         return{"error": "No teams found in database"}
     

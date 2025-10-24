@@ -17,7 +17,8 @@ if __name__ == "__main__":
    db = SessionLocal()
    
    for player in db.query(Player).all():
+      print(f"printed stats for {player.player_name}")
       load_last_n_games(player, n=20)
 
-    
+   print("finished")
 
