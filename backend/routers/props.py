@@ -9,7 +9,7 @@ from uuid import UUID
 from service import prop_service
 from auth.dependencies import get_current_user
 from service.game_service import get_teams_from_today_games
-
+from repositories.team_repository import TeamRepository
 router = APIRouter(
     prefix="/props",
     tags=["props"],
@@ -22,7 +22,7 @@ def get_db():
         yield db
     finally:
         db.close()
-
+ 
 @router.get("/", response_model=UserPropsResponse)
 async def get_user_props(db: Session = Depends(get_db),
                         user_id: str=Depends(get_current_user)):
@@ -45,16 +45,10 @@ async def delete_prop(prop_id: UUID,
 
 @router.post("/today", response_model=List[PropGeneratedResponse])
 async def generate_prop(request: PropRequestBase, db: Session = Depends(get_db)):
-    #Testing teams. I would use get_today_teams if nba was live
-    team1 = db.query(Team).filter(Team.name == "Los Angeles Lakers").first()
-    team2 = db.query(Team).filter(Team.name == "Golden State Warriors").first()
-    team3 = db.query(Team).filter(Team.name == "Toronto Raptors").first()
-    team4 = db.query(Team).filter(Team.name == "Detroit Pistons").first()
-
-    #team_repo = TeamRepository(db)
-    #teams = get_teams_from_today_games(team_repo)
-
-    teams = get_teams_from_today_games()
+      
+    team_repo = TeamRepository(db)
+    teams = get_teams_from_today_games(team_repo)
+    
     if not teams:
         return{"error": "No teams found in database"}
     

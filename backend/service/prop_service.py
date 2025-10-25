@@ -20,18 +20,42 @@ from redis_client import get_redis_client
 
 class PropGenerator:
     def __init__(self, prop_type: str, stat: int, threshold: int, num_games:int,
-                 num_rec: int):
+                 num_rec: int, z_score_threshold: float=2.0):
         self.prop_type = prop_type # pts, ast, etc..
         self.stat = stat # ex. 15 pts
         self.threshold = threshold # Minimum Success rate
         self.num_games = num_games # amount of games to analyze
         self.num_rec = num_rec # num of props to return
+        self.z_score_threshold = z_score_threshold
         self.db = SessionLocal()
 
     def __del__(self):
         """Ensure database session is closed when object is destroyed"""
         if hasattr(self, 'db'):
             self.db.close()
+    
+    def get_player_stat_val(self, recent_stats: List[PlayerGameStat]) -> List[float]:
+
+        stat_map = {
+            "PTS": lambda s: s.pts,
+            "AST": lambda s: s.ast,
+            "REB": lambda s: s.reb,
+            "STL": lambda s: s.stl,
+            "BLK": lambda s: s.blk,
+            "TOV": lambda s: s.tov,
+            "3PM": lambda s: s.three_pm
+        }
+        if self.prop_type not in stat_map:
+            return []
+        
+        values = []
+        for s in recent_stats:
+            value = stat_map[self.prop_type](s)
+            if value is not None:
+                values.append(value)
+        return values
+        
+        
     
     """
         Analyze a player's performance against the prop threshold.
