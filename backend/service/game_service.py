@@ -33,3 +33,4 @@ def print_upcoming_games(upcoming_games):
         print("NBA Games:")
     for game in upcoming_games:
         print(f"{game['Away Team']} vs {game['Home Team']}")
+

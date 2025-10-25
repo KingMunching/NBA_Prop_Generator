@@ -1,3 +1,4 @@
+redis
 alembic
 fastapi
 h11

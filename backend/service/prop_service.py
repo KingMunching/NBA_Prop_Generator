@@ -13,7 +13,8 @@ from nba_api.stats.endpoints import commonplayerinfo, teamplayerdashboard
 from repositories.team_repository import TeamRepository
 from repositories import prop_repository
 from schemas import PropCreate
-
+import json 
+from redis_client import get_redis_client
 
 
 
@@ -106,10 +107,25 @@ class PropGenerator:
         return props[:self.num_rec]
     
     def generate_daily_props(self, teams: List[Team]):
+        redis_client = get_redis_client()
+        
+        cache_key = f"daily_props:{self.prop_type}:{self.stat}:{self.threshold}:{self.num_games}:{self.num_rec}"
+
+        try:
+            cached_props = redis_client.get(cache_key)
+            if cached_props:
+                print("cache hit")
+                #deserialize JSON string 
+                return json.loads(cached_props)
+        except Exception as e:
+            print(f"something wrong with redis: {e}")
+
+        print("cache missed")
+        #if cache missed, proceed with prop logic
         if not teams:
             print("No teams found for today's games.")
             return []
-
+        
         all_players = []
         for team in teams:
             for player in team.players:
@@ -119,7 +135,16 @@ class PropGenerator:
         unique_players = list({player.id: player for player in all_players}.values())
 
         # Generate props for the collected players
-        return self.generate_props(unique_players)
+        props = self.generate_props(unique_players)
+
+        #now store prop in the cahce.
+
+        try:
+            redis_client.setex(cache_key, 3600, json.dumps(props))
+        except Exception as e:
+            print(f"redis error storing prop: {e}")
+
+        return props
     
 def create_prop(db, prop: PropCreate, user_id:str):
     return prop_repository.create_prop(db, prop, user_id)
