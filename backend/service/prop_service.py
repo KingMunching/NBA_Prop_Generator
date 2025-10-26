@@ -15,6 +15,8 @@ from repositories import prop_repository
 from schemas import PropCreate
 import json 
 from redis_client import get_redis_client
+import datetime 
+import statistics 
 
 
 
@@ -67,42 +69,53 @@ class PropGenerator:
         
         recent_stats = get_last_n_stats(player, self.num_games)
         if not recent_stats:
-            return 0.0, 0
+            return None
+
+        stat_values = self.get_player_stat_val(recent_stats)
         # Count how many games met the threshold
-        games_analyzed = len(recent_stats)
-        if games_analyzed == 0:
-            return 0.0, 0
+        games_analyzed = len(stat_values)
 
-        sucesses = self.count_sucesses(recent_stats)
-        sucesses_rate = sucesses / games_analyzed
-        return sucesses_rate, games_analyzed
+        if games_analyzed <= 2:
+            return None
+        mean_val = statistics.mean(stat_values)
+        stdev_val = statistics.stdev(stat_values)
+
+        if stdev_val == 0:
+            if self.stat != mean_val:
+                return None
+            z_score = 0.0
+        else:
+            z_score = (self.stat - mean_val) / stdev_val
+
+        if abs(z_score) > self.z_score_threshold:
+            return None
+
+        overs = sum(1 for v in stat_values if v > self.stat)
+        unders = sum(1 for v in stat_values if v < self.stats)
+        
+        over_rate = overs / games_analyzed
+        under_rate = unders/ games_analyzed
+
+        if over_rate > under_rate:
+            direction = "Over"
+            success_rate = over_rate
+        else:
+            direction = "Under"
+            success_rate = under_rate
+
+        if success_rate < self.threshold:
+            return None
+
+        return {
+            "success_rate": success_rate,
+            "player_avg": round(mean_val, 2),
+            "z_score": round(z_score, 2),
+            "direction": direction,
+            "games_analyzed": games_analyzed,
+        }
+
+
     
-    """Count how many games met the threshold for the given prop type.
-
-    Args:
-        recent_stats: List of recent PlayerGameStat objects.
-
-    Returns:
-        Number of games that met/exceeded the threshold.
-    """
-    def count_sucesses(self, recent_stats: List[PlayerGameStat]) -> int:
-        count = 0
-        for stat in recent_stats:
-            if self.prop_type == "PTS" and stat.pts >= self.stat:
-                count += 1
-            elif self.prop_type == "ASR" and stat.ast >= self.stat:
-                count += 1
-            elif self.prop_type == "REB" and stat.reb >= self.stat:
-                count += 1
-            elif self.prop_type == "STL" and stat.stl >= self.stat:
-                count += 1
-            elif self.prop_type == "BLK" and stat.blk >= self.stat:
-                count += 1
-            elif self.prop_type == "TOV" and stat.tov >= self.stat:
-                count += 1
-            elif self.prop_type == "3PM" and stat.three_pm >= self.stat:
-                count += 1
-        return count
     
 
     """Generate props for the given players.
@@ -116,16 +129,16 @@ class PropGenerator:
     def generate_props(self, players: List[Player]) -> List[Dict[str, Any]]:
         props = []
         for player in players:
-            success_rate, games_analyzed = self.analyze_player(player)
-            if games_analyzed > 0 and success_rate >= self.threshold:
-               props.append({
-                   "nba_id": player.nba_id,
-                   "player_name": player.player_name,
-                   "team_nba_id": player.team_nba_id,
-                "success_rate": success_rate,
-                   "games_analyzed": games_analyzed,
-                   "prop_type": self.prop_type,
-                   "stat": self.stat
+           analysis = self.analyze_player(player)
+            
+           if analysis:
+                props.append({
+                "nba_id": player.nba_id,
+                "player_name": player.player_name,
+                "team_nba_id": player.team_nba_id,
+                "prop_type": self.prop_type,
+                "stat": self.stat,
+                **analysis
                }) 
         props.sort(key=lambda x: x["success_rate"], reverse=True)
         return props[:self.num_rec]
@@ -133,8 +146,10 @@ class PropGenerator:
     def generate_daily_props(self, teams: List[Team]):
         redis_client = get_redis_client()
         
-        cache_key = f"daily_props:{self.prop_type}:{self.stat}:{self.threshold}:{self.num_games}:{self.num_rec}"
+        cache_key = (f"daily_props:{self.prop_type}:{self.stat}:{self.threshold}:{self.num_games}:{self.num_rec}:{self.z_score_threshold}")
 
+
+        
         try:
             cached_props = redis_client.get(cache_key)
             if cached_props:

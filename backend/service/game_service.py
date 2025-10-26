@@ -12,18 +12,21 @@ from database import SessionLocal
 def get_teams_from_today_games(team_repo: TeamRepository) -> List[Team]:
     today_games = scoreboard.ScoreBoard()
     games_data = today_games.games.get_dict()
-
+    
     teams = set()
     for game in games_data:
         home_team = f"{game['homeTeam']['teamCity']} {game['homeTeam']['teamName']}"
         away_team = f"{game['awayTeam']['teamCity']} {game['awayTeam']['teamName']}"
-        
+    
         home_team_from_db = team_repo.get_team_by_name(home_team)
         away_team_from_db = team_repo.get_team_by_name(away_team)
-
-        teams.add(home_team_from_db)
-        teams.add(away_team_from_db)
-
+   
+        if home_team_from_db is not None:
+            teams.add(home_team_from_db)
+   
+        if away_team_from_db is not None:
+            teams.add(away_team_from_db)
+   
     return list(teams)
 
 

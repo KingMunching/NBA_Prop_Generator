@@ -48,9 +48,15 @@ async def generate_prop(request: PropRequestBase, db: Session = Depends(get_db))
       
     team_repo = TeamRepository(db)
     teams = get_teams_from_today_games(team_repo)
+    team_with_none = []
+
+    for team in teams:
+        if team is not None:
+            team_with_none.append(team)
+
     
-    if not teams:
-        return{"error": "No teams found in database"}
+    #if not teams:
+    #   return{"error": "No teams found in database"}
     
     prop_generator = PropGenerator(
         prop_type=request.prop_type,
@@ -58,6 +64,7 @@ async def generate_prop(request: PropRequestBase, db: Session = Depends(get_db))
         threshold=request.threshold,
         num_games=request.num_games,
         num_rec=request.num_rec,
+        z_score_threshold = request.z_score_threshold
     )
     props = prop_generator.generate_daily_props(teams)
     return props
