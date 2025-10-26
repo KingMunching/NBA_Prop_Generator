@@ -56,7 +56,7 @@ const PropCard = ({ prop, onSave, onDelete, onViewDetails, isSaved = false }) =>
                         </CardTitle>
                            <div className="mt-1.5 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-400/20 rounded-md px-3 py-1.5">
                             <p className="text-slate-300 text-sm">
-                                {getPropTypeLabel(prop.prop_type)} Over <span className="font-bold text-white">{prop.stat}</span>
+                                {getPropTypeLabel(prop.prop_type)} <span className="font-bold text-white">{prop.direction} {prop.stat}</span>
                             </p>
                         </div>
                     </div>
@@ -92,6 +92,18 @@ const PropCard = ({ prop, onSave, onDelete, onViewDetails, isSaved = false }) =>
                         <span className="text-slate-300 text-sm">Games Analyzed:</span>
                         <span className="text-blue-400 font-medium">
                             {gamesAnalyzed}
+                        </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <span className="text-slate-300 text-sm">Player Avg:</span>
+                        <span className="text-blue-400 font-medium">
+                            {prop.player_avg}
+                        </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <span className="text-slate-300 text-sm">Z-Score:</span>
+                        <span className="text-blue-400 font-medium">
+                            {prop.z_score}
                         </span>
                     </div>
                     
