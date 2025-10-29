@@ -91,7 +91,7 @@ class PropGenerator:
             return None
 
         overs = sum(1 for v in stat_values if v > self.stat)
-        unders = sum(1 for v in stat_values if v < self.stats)
+        unders = sum(1 for v in stat_values if v < self.stat)
         
         over_rate = overs / games_analyzed
         under_rate = unders/ games_analyzed

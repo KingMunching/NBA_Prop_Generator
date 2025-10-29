@@ -78,7 +78,7 @@ class PropRequestBase(BaseModel):
     num_games: int = Field(20, description="Number of games to analyze")
     num_rec: int = Field(5, description="Number of recommendations to return")
     threshold: float = Field(0.8, descriptivon="Minimum success rate (0.0-1.0)")
-    z_score_threshold: float = Field(1.5, description="Max Z-Score distance from the mean") 
+    z_score_threshold: float = Field(0.5, description="Max Z-Score distance from the mean") 
 
 class PropGeneratedResponse(PlayerBase):
     success_rate: float
