@@ -20,7 +20,7 @@ router = APIRouter(
 )
 
 CRON_SECRET_KEY = os.getenv("CRON_SECRET_KEY")
-router.post("/update-today-stats")
+@router.post("/update-today-stats")
 async def update_today_stats(request: Request, db: Session = Depends(get_db)):
     auth_header = request.headers.get("Authorization")
     # the endpoint must be accessed with a secret key
