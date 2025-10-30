@@ -4,7 +4,7 @@ from database import engine, Base, SessionLocal
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
-from routers import team, player, props
+from routers import team, player, props, jobs
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -13,7 +13,7 @@ origins = [
     "http://localhost:5173",
     "http://localhost:5175",
     "http://172.18.0.3:5173"
-
+    "https://nba-prop-generator.onrender.com/"
 ]
 
 app.add_middleware(
@@ -27,6 +27,7 @@ app.add_middleware(
 app.include_router(team.router)
 app.include_router(player.router)
 app.include_router(props.router)
+app.include_router(jobs.router)
 
 @app.get("/")
 def read_root():

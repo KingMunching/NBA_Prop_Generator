@@ -15,4 +15,4 @@ def retry_nba_call(fn, *args, retries=3, backoff=2, **kwargs):
                 raise
             wait = backoff * (2 ** (attempt - 1))
             print(f"⚠ NBA API error ({e}), retry {attempt}/{retries} in {wait}s…")
-            time.sleep(wait)
+            time.sleep(60)
