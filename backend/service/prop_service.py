@@ -69,6 +69,7 @@ class PropGenerator:
         
         recent_stats = get_last_n_stats(player, self.num_games)
         if not recent_stats:
+            print("rejected cuz recent stats empty")
             return None
 
         stat_values = self.get_player_stat_val(recent_stats)
@@ -76,18 +77,22 @@ class PropGenerator:
         games_analyzed = len(stat_values)
 
         if games_analyzed <= 2:
+            print("rejected cuz games_anal")
+
             return None
         mean_val = statistics.mean(stat_values)
         stdev_val = statistics.stdev(stat_values)
 
         if stdev_val == 0:
             if self.stat != mean_val:
+                print("z score bad")
                 return None
             z_score = 0.0
         else:
             z_score = (self.stat - mean_val) / stdev_val
 
         if abs(z_score) > self.z_score_threshold:
+            print("zscore less  than zthreshold")
             return None
 
         overs = sum(1 for v in stat_values if v > self.stat)
@@ -104,6 +109,7 @@ class PropGenerator:
             success_rate = under_rate
 
         if success_rate < self.threshold:
+            print("less than threshold")
             return None
 
         return {
@@ -149,7 +155,6 @@ class PropGenerator:
         cache_key = (f"daily_props:{self.prop_type}:{self.stat}:{self.threshold}:{self.num_games}:{self.num_rec}:{self.z_score_threshold}")
 
 
-        
         try:
             cached_props = redis_client.get(cache_key)
             if cached_props:
@@ -166,15 +171,19 @@ class PropGenerator:
             return []
         
         all_players = []
+        team_repo = TeamRepository(self.db)
         for team in teams:
-            for player in team.players:
+            key_players = team_repo.get_key_players(team)
+            for player in key_players:
                 all_players.append(player)
-
+        print(len(all_players))
         # Remove duplicates if any (players playing in multiple games)
+
+        
         unique_players = list({player.id: player for player in all_players}.values())
 
         # Generate props for the collected players
-        props = self.generate_props(unique_players)
+        props = self.generate_props(all_players)
 
         #now store prop in the cahce.
 

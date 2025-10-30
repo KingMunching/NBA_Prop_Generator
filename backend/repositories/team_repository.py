@@ -38,10 +38,10 @@ class TeamRepository:
     def get_key_players(self, team: TeamModel) -> List[PlayerModel]:
         #Get players in team
         players = (self.db.query(PlayerModel, func.sum(cast(PlayerGameStat.min, Integer)).label("total_min"))
-        .join(PlayerGameStat, PlayerModel.id == PlayerGameStat.player_id)\
-        .filter(PlayerModel.team_id == team.id).group_by(PlayerModel.id)\
+        .join(PlayerGameStat, PlayerModel.nba_id == PlayerGameStat.player_nba_id)\
+        .filter(PlayerModel.team_nba_id == team.nba_id).group_by(PlayerModel.id)\
         .order_by(func.sum(cast(PlayerGameStat.min, Integer)).desc())
-        .limit(3).all()
+        .limit(6).all()
         )
 
         key_players = []
