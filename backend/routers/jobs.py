@@ -36,7 +36,7 @@ async def update_today_stats(request: Request, db: Session = Depends(get_db)):
     print(f"Found {len(teams)} to update")
 
     for team in teams:
-        update_team_stats(team)
+        update_team_stats(db, team)
         time.sleep(15)
     
     return {"status": "success", "message": f"Updated stats for {len(teams)} teams."}
