@@ -69,7 +69,7 @@ class PropGenerator:
         
         recent_stats = get_last_n_stats(player, self.num_games)
         if not recent_stats:
-            print("rejected cuz recent stats empty")
+           
             return None
 
         stat_values = self.get_player_stat_val(recent_stats)
@@ -77,22 +77,18 @@ class PropGenerator:
         games_analyzed = len(stat_values)
 
         if games_analyzed <= 2:
-            print("rejected cuz games_anal")
-
             return None
         mean_val = statistics.mean(stat_values)
         stdev_val = statistics.stdev(stat_values)
 
         if stdev_val == 0:
             if self.stat != mean_val:
-                print("z score bad")
                 return None
             z_score = 0.0
         else:
             z_score = (self.stat - mean_val) / stdev_val
 
         if abs(z_score) > self.z_score_threshold:
-            print("zscore less  than zthreshold")
             return None
 
         overs = sum(1 for v in stat_values if v > self.stat)
@@ -109,7 +105,6 @@ class PropGenerator:
             success_rate = under_rate
 
         if success_rate < self.threshold:
-            print("less than threshold")
             return None
 
         return {
