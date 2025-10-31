@@ -1,5 +1,5 @@
 import time 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status, BackgroundTasks
 from sqlalchemy.orm import Session
 import os
 from database import SessionLocal
@@ -19,9 +19,23 @@ router = APIRouter(
     tags=['jobs']
 )
 
+def run_update_logic(db: Session):
+    team_repo = TeamRepository(db)
+    teams = get_teams_from_today_games(team_repo)
+   
+    print(f"BACKGROUND JOB: Found {len(teams)} teams to update.")
+   
+    for team in teams:
+        print(f"BACKGROUND JOB: Updating stats for team: {team.full_name}")
+        update_team_stats(db, team)
+        time.sleep(15)
+   
+    print("BACKGROUND JOB: Finished updating all team stats.")
+
+
 CRON_SECRET_KEY = os.getenv("CRON_SECRET_KEY")
 @router.post("/update-today-stats")
-async def update_today_stats(request: Request, db: Session = Depends(get_db)):
+async def update_today_stats(request: Request,background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     auth_header = request.headers.get("Authorization")
     # the endpoint must be accessed with a secret key
     if not CRON_SECRET_KEY or auth_header != f"Bearer {CRON_SECRET_KEY}":
@@ -30,15 +44,9 @@ async def update_today_stats(request: Request, db: Session = Depends(get_db)):
             detail = "Invalid or missing AUTH token"
         )
     
-    team_repo = TeamRepository(db)
-    teams = get_teams_from_today_games(team_repo)
+    background_tasks.add_task(run_update_logic, db)
 
-    print(f"Found {len(teams)} to update")
-
-    for team in teams:
-        update_team_stats(db, team)
-        time.sleep(15)
+    return {"status": "success", "message": "Accepted: Stat update job started in the background."}
     
-    return {"status": "success", "message": f"Updated stats for {len(teams)} teams."}
 
 
