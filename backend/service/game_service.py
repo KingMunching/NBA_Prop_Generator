@@ -3,6 +3,11 @@ from nba_api.live.nba.endpoints import scoreboard
 from models.team_model import Team
 from repositories.team_repository import TeamRepository
 from database import SessionLocal
+from redis_client import redis_client
+import json
+from datetime import datetime, timezone
+
+
 
 """
     Fetches all games scheduled for today and returns a list of dictionaries 
@@ -10,23 +15,43 @@ from database import SessionLocal
     """
 
 def get_teams_from_today_games(team_repo: TeamRepository) -> List[Team]:
-    today_games = scoreboard.ScoreBoard()
-    games_data = today_games.games.get_dict()
+
+    date_today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    cache_key = f"teams_today: {date_today_str}"
+    cached_team_names = redis_client.get(cache_key)
+
+    team_names = set()
+
     
+    if cached_team_names:
+       print("cache hit for teams today")
+       team_names = set(json.loads(cached_team_names))
+    else:
+        print("cache miss for fetch todays games")
+        today_games = scoreboard.ScoreBoard()
+        games_data = today_games.games.get_dict()
+
+        for game in games_data:
+            home_team = f"{game['homeTeam']['teamCity']} {game['homeTeam']['teamName']}"
+            away_team = f"{game['awayTeam']['teamCity']} {game['awayTeam']['teamName']}"
+    
+            home_team_from_db = team_repo.get_team_by_name(home_team)
+            away_team_from_db = team_repo.get_team_by_name(away_team)
+   
+            if home_team_from_db is not None:
+                team_names.add(home_team_from_db.name)
+   
+            if away_team_from_db is not None:
+                team_names.add(away_team_from_db.name)
+
+        redis_client.set(cache_key, json.dumps(list(team_names)), ex=28800)
+
     teams = set()
-    for game in games_data:
-        home_team = f"{game['homeTeam']['teamCity']} {game['homeTeam']['teamName']}"
-        away_team = f"{game['awayTeam']['teamCity']} {game['awayTeam']['teamName']}"
+    for name in team_names:
+        team_from_db = team_repo.get_team_by_name(name)
+        if team_from_db:
+            teams.add(team_from_db)
     
-        home_team_from_db = team_repo.get_team_by_name(home_team)
-        away_team_from_db = team_repo.get_team_by_name(away_team)
-   
-        if home_team_from_db is not None:
-            teams.add(home_team_from_db)
-   
-        if away_team_from_db is not None:
-            teams.add(away_team_from_db)
-   
     return list(teams)
 
 

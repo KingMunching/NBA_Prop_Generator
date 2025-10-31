@@ -10,7 +10,7 @@ from time import sleep
 def update_team_stats(db: Session, team: Team):
     player_stat_repo = PlayerStatRepository(db)
     for player in team.players:
-        n = 10
+        n = 5
         player_stat_repo.load_last_n_games(player,n)
         sleep(2)
         print(f"loaded last {n} stats for {player.player_name}")

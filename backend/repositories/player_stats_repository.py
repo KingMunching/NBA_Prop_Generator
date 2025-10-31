@@ -40,6 +40,7 @@ class PlayerStatRepository:
             )
             # If stat already in db, skip
             if exist:
+                print(f"stat for {player.player_name} exist in db, skipped.")
                 continue
                 
             stat = PlayerGameStat(
