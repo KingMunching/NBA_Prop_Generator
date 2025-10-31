@@ -26,7 +26,7 @@ def run_update_logic(db: Session):
     print(f"BACKGROUND JOB: Found {len(teams)} teams to update.")
    
     for team in teams:
-        print(f"BACKGROUND JOB: Updating stats for team: {team.full_name}")
+        print(f"BACKGROUND JOB: Updating stats for team: {team.name}")
         update_team_stats(db, team)
         time.sleep(15)
    
