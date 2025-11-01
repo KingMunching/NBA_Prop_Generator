@@ -11,17 +11,18 @@ from repositories.player_repository import PlayerRepository
 from repositories.team_repository import TeamRepository
 from service.game_service import get_teams_from_today_games
 from nba_api.stats.static import players
-from scripts.update_stats import update_team_stats
+from scripts.refresh_players import refresh_team_players
 
 if __name__ == "__main__":
 
    db = SessionLocal()
    team_repo = TeamRepository(db)
-   teams = get_teams_from_today_games(team_repo)
+   teams = team_repo.get_teams()
 
    for team in teams:
-      update_team_stats(db, team)
-      print(team.name)
-      time.sleep(60)
+     team_id = team_repo.get_team_by_nba_id(team.nba_id)
+     refresh_team_players(team_id)
+   
+   
    
 

@@ -14,6 +14,9 @@ class PlayerRepository:
     def get_player_by_nba_id(self, nba_id: int):
         return self.db.query(PlayerModel).filter(PlayerModel.nba_id == nba_id).first()
 
+    def get_players_by_team_id(self, team_nba_id: int):
+        return self.db.query(PlayerModel).filter(PlayerModel.team_nba_id == team_nba_id).all()
+
     def create_player(self, player: PlayerModel):
         self.db.add(player)
         self.db.commit()

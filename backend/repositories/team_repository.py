@@ -4,7 +4,7 @@ from models.team_model import Team as TeamModel
 from models.player_model import Player as PlayerModel
 from models.player_stats import PlayerGameStat
 from sqlalchemy import func, cast, Integer
-
+from datetime import datetime, timedelta, timezone
 class TeamRepository:
     
     def __init__(self, db: Session):
@@ -35,13 +35,20 @@ class TeamRepository:
             self.db.commit()
         return db_team
     
+    
+    
     def get_key_players(self, team: TeamModel) -> List[PlayerModel]:
+
+        #time window for recent games
+        recent_date_limit = datetime.now(timezone.utc) - timedelta(days=30)
+
         #Get players in team
         players = (self.db.query(PlayerModel, func.sum(cast(PlayerGameStat.min, Integer)).label("total_min"))
         .join(PlayerGameStat, PlayerModel.nba_id == PlayerGameStat.player_nba_id)\
-        .filter(PlayerModel.team_nba_id == team.nba_id).group_by(PlayerModel.id)\
+        .filter(PlayerModel.team_nba_id == team.nba_id).filter(PlayerGameStat.date >= recent_date_limit)
+        .group_by(PlayerModel.id)\
         .order_by(func.sum(cast(PlayerGameStat.min, Integer)).desc())
-        .limit(6).all()
+        .limit(7).all()
         )
 
         key_players = []
