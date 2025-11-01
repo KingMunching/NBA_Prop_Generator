@@ -62,4 +62,4 @@ def refresh_team_players(team: Team, season = "2025-26"):
     print(f"finished refreshing rosters for {team.name}")
 
 if __name__ == "__main__":
-    refresh_players()
+    refresh_team_players()

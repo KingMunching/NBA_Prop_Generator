@@ -78,6 +78,8 @@ const UserProps = () => {
         }
     };
 
+    
+
     const getPropTypeIcon = (type) => {
         const iconMap = {
             'PTS': Target,
@@ -218,7 +220,6 @@ const UserProps = () => {
                                         key={prop.id || index}
                                         prop={prop}
                                         onDelete={handleDelete}
-                                        onViewDetails={(prop) => console.log('View details for:', prop)}
                                         isSaved={true}
                                     />
                                 ))}

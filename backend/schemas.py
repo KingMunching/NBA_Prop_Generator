@@ -43,7 +43,7 @@ class TeamResponse(TeamBase):
 
 
 class PlayerGameStatBase(BaseModel):
-    player_id: int
+    player_nba_id: int
     date: date
     min: Optional[str] = "0"
     pts: Optional[int] = 0

@@ -37,7 +37,7 @@ def get_player(player_id:int, db: Session = Depends(get_db)):
 @router.get("/{player_id}/stats", response_model=List[PlayerGameStatResponse])
 def get_player_stats(player_id: int, num_games: int = 10, db: Session = Depends(get_db)):
     player_repo = PlayerRepository(db)
-    player = player_repo.get_player_by_id(player_id)
+    player = player_repo.get_player_by_nba_id(player_id)
     if player:
         stats = get_last_n_stats(player, num_games)
         return stats
