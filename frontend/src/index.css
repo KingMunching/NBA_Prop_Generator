@@ -119,3 +119,38 @@
     @apply bg-background text-foreground;
   }
 }
+
+[data-chart] .recharts-rectangle.recharts-tooltip-cursor {
+  fill: transparent !important;
+}
+
+[data-chart] .recharts-cartesian-axis-tick_text {
+  fill: #e2e8f0 !important;
+}
+
+/* Custom Scrollbar for Webkit Browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* A neutral gray */
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Custom Scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 transparent;
+}

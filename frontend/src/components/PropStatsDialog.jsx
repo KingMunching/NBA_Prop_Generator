@@ -1,16 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell } from 'recharts';
-import { Calendar, TrendingUp, Target, User } from 'lucide-react';
+import { ChartContainer } from '@/components/ui/chart';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Cell, ReferenceLine, Tooltip } from 'recharts';
+import { Calendar, TrendingUp, Target, User, X } from 'lucide-react';
 import api from '../api';
+
+const CustomTooltip = ({ active, payload, label, propType }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-lg p-2 shadow-xl text-center">
+        <p className="text-white font-bold text-lg">{payload[0].value} <span className="text-xs text-slate-400">{propType}</span></p>
+        <p className="text-slate-400 text-xs">{label}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
 
 const PropStatsDialog = ({ prop, isOpen, onClose }) => {
   const [stats, setStats] = useState([]);
@@ -29,7 +43,9 @@ const PropStatsDialog = ({ prop, isOpen, onClose }) => {
       setLoading(true);
       setError(null);
       const numGames = prop.num_games || prop.games_analyzed || 10;
+      console.log('Fetching stats for player:', prop.nba_id, 'num_games:', numGames);
       const response = await api.get(`/players/${prop.nba_id}/stats?num_games=${numGames}`);
+      console.log('Stats response:', response.data);
       
       // Transform the stats data for the chart
       const transformedStats = response.data.map((stat) => {
@@ -37,7 +53,7 @@ const PropStatsDialog = ({ prop, isOpen, onClose }) => {
         const isHit = prop.direction === 'Over' ? statValue > prop.stat : statValue < prop.stat;
         
         return {
-          date: new Date(stat.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          date: new Date(stat.date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
           value: statValue,
           isHit: isHit,
           threshold: prop.stat,
@@ -92,7 +108,13 @@ const PropStatsDialog = ({ prop, isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-800 border-slate-700">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-800 border-slate-700 p-0">
+        <DialogClose asChild>
+          <button className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-slate-700/50 hover:bg-slate-600/80 flex items-center justify-center transition-colors">
+            <X className="h-4 w-4 text-slate-400" />
+          </button>
+        </DialogClose>
+        <div className="p-6 pt-12">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3 text-white">
             <div className="bg-slate-700/50 rounded-lg p-2 border border-slate-600">
@@ -181,54 +203,66 @@ const PropStatsDialog = ({ prop, isOpen, onClose }) => {
                   <BarChart className="h-5 w-5" />
                   Game-by-Game Performance
                 </CardTitle>
-                <div className="text-sm text-slate-400 mt-2">
+                <div className="text-sm text-slate-400 mt-2 flex flex-wrap gap-4">
                   <span className="inline-flex items-center gap-2">
                     <span className="w-3 h-3 bg-green-500 rounded"></span>
-                    Hit (Met threshold)
+                    Hit ({prop?.direction})
                   </span>
-                  <span className="inline-flex items-center gap-2 ml-4">
+                  <span className="inline-flex items-center gap-2">
                     <span className="w-3 h-3 bg-red-500 rounded"></span>
-                    Miss (Below threshold)
+                    Miss
+                  </span>
+                  <span className="inline-flex items-center gap-2">
+                    <span className="w-8 h-0.5 bg-blue-500 border-t-2 border-dashed border-blue-500"></span>
+                    Threshold ({prop?.stat})
                   </span>
                 </div>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={chartConfig} className="h-[400px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={stats}>
+                    <BarChart data={stats} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
                       <XAxis 
                         dataKey="date" 
-                        stroke="#94a3b8"
-                        tick={{ fill: '#94a3b8' }}
+                        stroke="#e2e8f0"
+                        tick={{ fill: '#e2e8f0' }}
                         angle={-45}
                         textAnchor="end"
                         height={80}
                       />
                       <YAxis 
-                        stroke="#94a3b8"
-                        tick={{ fill: '#94a3b8' }}
+                        stroke="#e2e8f0"
+                        tick={{ fill: '#e2e8f0' }}
+                        domain={[0, 'dataMax + 5']}
+                        tickFormatter={(value) => Math.floor(value)}
                       />
-                      <ChartTooltip 
-                        content={<ChartTooltipContent />}
-                        cursor={{ fill: 'rgba(255, 255, 255, 0.1)' }}
+                      {/* Threshold line - MUST be before bars */}
+                      <ReferenceLine 
+                        y={prop?.stat} 
+                        stroke="#3b82f6" 
+                        strokeWidth={3}
+                        strokeDasharray="8 4"
+                        label={{ 
+                          value: `${prop?.stat}`, 
+                          fill: '#3b82f6', 
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          position: 'right' 
+                        }}
+                      />
+                      <Tooltip
+                        cursor={false}
+                        content={<CustomTooltip propType={prop?.prop_type} />}
                       />
                       <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                         {stats.map((entry, index) => (
                           <Cell 
                             key={`cell-${index}`} 
-                            fill={entry.isHit ? '#22c55e' : '#ef4444'} 
+                            fill={entry.isHit ? 'rgba(34, 197, 94, 0.7)' : 'rgba(239, 68, 68, 0.7)'} 
                           />
                         ))}
                       </Bar>
-                      {/* Threshold line */}
-                      <Bar 
-                        dataKey="threshold" 
-                        fill="transparent" 
-                        stroke="#3b82f6" 
-                        strokeWidth={2}
-                        strokeDasharray="5 5"
-                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </ChartContainer>
@@ -278,6 +312,7 @@ const PropStatsDialog = ({ prop, isOpen, onClose }) => {
             </Card>
           </div>
         )}
+        </div>
       </DialogContent>
     </Dialog>
   );
