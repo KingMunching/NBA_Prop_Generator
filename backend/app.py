@@ -14,6 +14,7 @@ origins = [
     "http://localhost:5175",
     "http://172.18.0.3:5173"
     "https://nba-prop-generator.onrender.com/"
+    "https://nba-prop-generator.vercel.app"
 ]
 
 app.add_middleware(
